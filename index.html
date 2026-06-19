@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CyberCore Omega</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="screen-1">
+  <div class="preloader" id="preloader">
+    <div class="preloader-card">
+      <div class="loader-orb"></div>
+      <p class="eyebrow">Initialisation du protocole</p>
+      <h2>CyberCore Omega</h2>
+      <p id="preloadText">Chargement des visuels...</p>
+      <div class="preload-bar"><span id="preloadBar"></span></div>
+      <strong id="preloadPercent">0%</strong>
+      <button id="enterBtn" type="button">Entrer dans CyberCore</button>
+    </div>
+  </div>
+
+  <main class="intro-page" id="introPage">
+    <section class="intro-screen active" id="visual1">
+      <div class="intro-card">
+        <div class="visual-side">
+          <picture>
+            <source media="(max-width: 760px)" srcset="nv_asset/illustrations_tel/vaisseau.png">
+            <img class="main-img ship-img" src="nv_asset/illustrations_ordi/vaisseau.png" alt="Vaisseau">
+          </picture>
+        </div>
+        <div class="text-side">
+          <h1>Planétaire</h1>
+          <p>À la suite de nombreux progrès technologiques dans l’aérospatial, l’Humanité, épuisant les ressources de la planète Terre, a lancé des missions d’exploration au confin de l’univers.</p>
+          <p>Les membres de l’unité des Éclaireurs, épaulés par leurs intelligences artificielles, voyagent en solitaire dans le but de trouver de nouvelles terres d’accueil ou de nouvelles ressources exploitables.</p>
+          <div class="actions">
+            <button class="next-btn" type="button" data-next="visual2">Continuer</button>
+            <button class="skip-btn secondary" type="button">Passer</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro-screen" id="visual2" hidden>
+      <div class="intro-card nova-card">
+        <div class="visual-side character-frame"><img class="main-img ia-img" src="nv_asset/characters/IA.png" alt="Nova"></div>
+        <div class="text-side">
+          <p class="eyebrow">NOVA / TRANSMISSION PRIORITAIRE</p>
+          <h1>Andromeda EX8050</h1>
+          <p>Éclaireur Eleven ! Une signature électronique anormale a été détectée en provenance de l’étoile matricule Andromeda EX8050.</p>
+          <p>Mission d’exploration validée. Initialisation de la procédure d’atterrissage. Veuillez passer en commande manuelle.</p>
+          <div class="actions">
+            <button class="next-btn" type="button" data-next="visual3">Continuer</button>
+            <button class="skip-btn secondary" type="button">Passer</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro-screen" id="visual3" hidden>
+      <div class="intro-card nova-card">
+        <div class="visual-side character-frame"><img class="main-img ia-img" src="nv_asset/characters/IA.png" alt="Nova"></div>
+        <div class="text-side">
+          <p class="eyebrow">NOVA / MODULES OPÉRATIONNELS</p>
+          <h1>Atterrissage réussi</h1>
+          <p>Éclaireur Eleven ! L’ensemble des modules du vaisseau sont opérationnels à la suite de l’atterrissage… Félicitations.</p>
+          <p>À présent, passez à la recherche de la provenance du signal. Les coordonnées GPS sont les suivantes : <strong>48.132126, -1.692145</strong>.</p>
+          <p>Bon courage !</p>
+          <div class="actions">
+            <button class="next-btn" type="button" data-next="visual4">Continuer</button>
+            <button class="skip-btn secondary" type="button">Passer</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro-screen" id="visual4" hidden>
+      <div class="intro-card nova-card">
+        <div class="visual-side character-frame"><img class="main-img ia-img" src="nv_asset/characters/IA.png" alt="Nova"></div>
+        <div class="text-side">
+          <p class="eyebrow">NOVA / SOURCE DU SIGNAL</p>
+          <h1>La porte</h1>
+          <p>Éclaireur Eleven, vous y êtes ! J’entre en phase de résonnance électromagnétique pour déverrouiller le mécanisme de cette porte.</p>
+          <p>Cette technologie est inconnue de nos registres d’exploration. Soyez vigilant !</p>
+          <div class="actions">
+            <button id="startGameBtn" type="button">Commencer</button>
+            <button class="skip-btn secondary" type="button">Passer</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main class="game-shell" id="gameShell" hidden>
+    <header class="game-header">
+      <div class="project-label">Projet classification / Cybercore OMEGA</div>
+      <h1>CYBERCORE</h1>
+      <div class="system-pill" id="systemPill">Système stable</div>
+    </header>
+
+    <section class="game-grid">
+      <aside class="left-column">
+        <div class="panel connected-panel">
+          <div class="panel-title">Connecté <span class="green-dot"></span></div>
+          <div class="connected-row">
+            <img src="nv_asset/characters/IA.png" alt="Nova">
+            <div><span>IA de bord</span><strong>NOVA</strong></div>
+          </div>
+        </div>
+
+        <div class="panel energy-panel">
+          <div class="energy-label">Énergie</div>
+          <div class="energy-main"><span id="energy">0</span><small>MW</small></div>
+        </div>
+
+        <div class="panel stats-panel">
+          <div class="stat-row"><span>Valeur clic</span><strong>+<span id="clickPower">1</span></strong></div>
+          <div class="stat-row"><span>Clics</span><strong id="clicks">0</strong></div>
+          <div class="stat-row"><span>Refroidissements</span><strong id="coolings">0</strong></div>
+          <div class="stat-row"><span>Surcharges</span><strong><span id="overloads">0</span>/3</strong></div>
+
+          <div class="meter-group">
+            <div class="meter-head"><span>Chaleur</span><strong><span id="heatValue">0</span>%</strong></div>
+            <div class="meter heat"><span id="heatBar"></span></div>
+            <small id="heatState">État : stable</small>
+          </div>
+
+          <div class="meter-group">
+            <div class="meter-head"><span>Décodage niveau</span><strong><span id="decodeValue">0</span>%</strong></div>
+            <div class="meter decode"><span id="decodeBar"></span></div>
+          </div>
+        </div>
+
+        <div class="panel tech-panel">
+          <div class="tech-panel-head"><h3>Technologies</h3><button id="techManualBtn" type="button">ⓘ Infos</button></div>
+          <div class="tech-icons">
+            <button class="tech-btn" id="coolBtn" data-tech="cool" data-name="Refroidissement d'urgence" data-tooltip="REFROIDISSEMENT D'URGENCE\A Débloqué niveau 2\A Coût : 200 MW\A Effet : réduit fortement la chaleur."><img src="nv_asset/icones/refroidissement.png" alt="Refroidissement"></button>
+            <button class="tech-btn" id="plasmaBtn" data-tech="plasma" data-name="Injection plasma" data-tooltip="INJECTION PLASMA\A Débloqué niveau 3\A Coût : 300 MW\A Effet : +3 MW par clic."><img src="nv_asset/icones/injection.png" alt="Injection plasma"></button>
+            <button class="tech-btn" id="batteryBtn" data-tech="battery" data-name="Batterie quantique" data-tooltip="BATTERIE QUANTIQUE\A Débloquée niveau 4\A Coût : 700 MW\A Effet : +5 MW par seconde."><img src="nv_asset/icones/batterie.png" alt="Batterie"></button>
+            <button class="tech-btn" id="stabilizerBtn" data-tech="stabilizer" data-name="Stabilisateur ionique" data-tooltip="STABILISATEUR IONIQUE\A Débloqué niveau 5\A Coût : 1 000 MW\A Effet : ralentit la montée de chaleur."><img src="nv_asset/icones/stabilisateur.png" alt="Stabilisateur"></button>
+            <button class="tech-btn" id="shieldBtn" data-tech="shield" data-name="Bouclier thermique" data-tooltip="BOUCLIER THERMIQUE\A Débloqué niveau 6\A Coût : 5 000 MW\A Effet : absorbe une surcharge critique."><img src="nv_asset/icones/bouclier.png" alt="Bouclier"></button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="reactor-panel panel" id="reactorPanel">
+        <div class="level-badge">Niveau <span id="levelNumber">1</span></div>
+        <div class="center-objective">
+          <span>Objectif</span>
+          <strong id="centerObjective">100 MW</strong>
+          <small id="centerProgress">0 / 100 MW</small>
+        </div>
+        <div class="point-layer" id="pointLayer"></div>
+        <button class="reactor-click" id="reactorButton" type="button">
+          <picture>
+            <source media="(max-width: 760px)" id="reactorSourceTel" srcset="nv_asset/generateur_tel/1.PNG">
+            <img id="reactorImage" src="nv_asset/generateur_ordi/1.PNG" alt="Générateur CyberCore">
+          </picture>
+          <span class="click-pop" id="clickPop">+1</span>
+        </button>
+      </section>
+
+      <aside class="right-column">
+        <div class="panel ship-transfer-panel">
+          <h3>Image transmise par le vaisseau</h3>
+          <div class="ship-transfer-box" id="shipTransferBox">
+            <span>En attente de transmission visuelle...</span>
+          </div>
+        </div>
+
+        <div class="panel transmission-panel">
+          <div class="trans-head">
+            <h3>Transmission</h3>
+            <button id="soundToggle" type="button">Son : ON</button>
+          </div>
+          <div class="transmission-list" id="transmissionList"></div>
+        </div>
+
+        <div class="controls">
+          <button id="pauseBtn" type="button">Pause</button>
+          <button id="resetBtn" type="button" class="danger">Reset</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+
+  <div class="game-over-modal" id="gameOverModal" hidden>
+    <div class="game-over-card">
+      <p class="eyebrow">CyberCore Omega</p>
+      <h2><span>⚠</span> GAME OVER <span>⚠</span></h2>
+      <p class="game-over-reason" id="gameOverReason">Le cœur du CyberCore est entré en fusion critique.</p>
+
+      <div class="game-over-stats">
+        <div><span>Niveau atteint</span><strong id="goLevel">1</strong></div>
+        <div><span>Énergie finale</span><strong id="goEnergy">0 MW</strong></div>
+        <div><span>Clics total</span><strong id="goClicks">0</strong></div>
+        <div><span>Énergie utilisée</span><strong id="goSpent">0 MW</strong></div>
+        <div><span>Durée</span><strong id="goDuration">00:00</strong></div>
+        <div><span>Technologies utilisées</span><strong id="goTechs">Aucune</strong></div>
+      </div>
+
+      <button id="restartGameBtn" type="button">Recommencer</button>
+    </div>
+  </div>
+
+
+  <div class="level-choice-modal" id="levelChoiceModal" hidden>
+    <div class="level-choice-card">
+      <p class="eyebrow">CyberCore Omega</p>
+      <h2>Production stabilisée</h2>
+      <p>Le niveau 7 est terminé. Choisissez la suite de la mission.</p>
+      <div class="choice-actions">
+        <button id="missionCompleteBtn" type="button">Mission accomplie</button>
+        <button id="continueProductionBtn" type="button">Poursuivre la production</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-modal" id="successModal" hidden>
+    <div class="success-card">
+      <p class="eyebrow">CyberCore Omega</p>
+      <h2>Mission accomplie</h2>
+      <p>Production stabilisée. Connexion avec CyberCore terminée.</p>
+      <div class="success-stats">
+        <div><span>Niveau atteint</span><strong id="successLevel">7</strong></div>
+        <div><span>Énergie finale</span><strong id="successEnergy">0 MW</strong></div>
+        <div><span>Clics total</span><strong id="successClicks">0</strong></div>
+        <div><span>Énergie utilisée</span><strong id="successSpent">0 MW</strong></div>
+        <div><span>Durée</span><strong id="successDuration">00:00</strong></div>
+        <div><span>Technologies utilisées</span><strong id="successTechs">Aucune</strong></div>
+      </div>
+      <button id="successRestartBtn" type="button">Recommencer</button>
+    </div>
+  </div>
+
+
+  <div class="tech-info-modal" id="techInfoModal" hidden>
+    <div class="tech-info-card">
+      <div class="tech-info-top">
+        <div class="tech-info-icon-wrap">
+          <img id="techInfoIcon" src="" alt="">
+        </div>
+        <div>
+          <p class="eyebrow">Technologie débloquée</p>
+          <h2 id="techInfoTitle">Technologie</h2>
+        </div>
+      </div>
+
+      <div class="tech-info-grid">
+        <div><span>Coût initial</span><strong id="techInfoCost">0 MW</strong></div>
+        <div><span>Déblocage</span><strong id="techInfoLevel">Niveau 1</strong></div>
+      </div>
+
+      <div class="tech-info-section">
+        <h3>Avantage</h3>
+        <p id="techInfoAdvantage"></p>
+      </div>
+
+      <div class="tech-info-section warning">
+        <h3>Inconvénient</h3>
+        <p id="techInfoDrawback"></p>
+      </div>
+
+      <div class="tech-info-section">
+        <h3>Description</h3>
+        <p id="techInfoDescription"></p>
+      </div>
+
+      <button id="closeTechInfoBtn" type="button">Fermer</button>
+    </div>
+  </div>
+
+
+  <div class="tech-manual-modal" id="techManualModal" hidden>
+    <div class="tech-manual-card">
+      <div class="tech-manual-head">
+        <div>
+          <p class="eyebrow">Base de données CyberCore</p>
+          <h2>Récapitulatif technologies</h2>
+        </div>
+        <button id="closeTechManualBtn" class="modal-x" type="button" aria-label="Fermer">×</button>
+      </div>
+
+      <div class="tech-unlock-summary">
+        <span>Technologies débloquées</span>
+        <strong id="manualUnlockedCount">0 / 5</strong>
+        <div class="manual-unlock-bar"><i id="manualUnlockedBar"></i></div>
+      </div>
+
+      <div class="tech-manual-list" id="techManualList"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
