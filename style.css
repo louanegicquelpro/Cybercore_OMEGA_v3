@@ -2747,3 +2747,412 @@ html,body,button,.reactor-click,.light-point,.tech-btn{
     }
   }
 }
+
+
+/* =========================================================
+   TÉLÉPHONE : Transmission devient un bouton + popup
+   Objectif : donner plus de place au générateur.
+   ========================================================= */
+
+#openTransmissionBtn{
+  border:1px solid rgba(38,232,255,.36);
+  border-radius:999px;
+  padding:7px 10px;
+  color:white;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:900;
+  background:linear-gradient(135deg,rgba(38,232,255,.18),rgba(255,43,214,.18));
+  box-shadow:0 0 18px rgba(38,232,255,.10);
+}
+
+.tech-panel-head{
+  flex-wrap:wrap;
+}
+
+/* Popup transmissions */
+.transmission-modal{
+  position:fixed;
+  inset:0;
+  z-index:10001;
+  display:grid;
+  place-items:center;
+  padding:clamp(10px,3vw,24px);
+  background:
+    radial-gradient(circle at 50% 38%,rgba(38,232,255,.14),transparent 34%),
+    radial-gradient(circle at 85% 80%,rgba(255,43,214,.14),transparent 34%),
+    rgba(0,0,0,.78);
+  backdrop-filter:blur(13px);
+  -webkit-backdrop-filter:blur(13px);
+}
+
+.transmission-modal-card{
+  position:relative;
+  width:min(720px,94vw);
+  max-height:86dvh;
+  overflow:hidden;
+  border:1px solid rgba(38,232,255,.40);
+  border-radius:28px;
+  padding:22px;
+  background:
+    radial-gradient(circle at 12% 10%,rgba(38,232,255,.18),transparent 30%),
+    radial-gradient(circle at 90% 88%,rgba(255,43,214,.16),transparent 32%),
+    linear-gradient(135deg,rgba(6,9,22,.96),rgba(18,8,32,.95));
+  box-shadow:0 0 90px rgba(38,232,255,.18),0 0 120px rgba(255,43,214,.12),0 35px 130px rgba(0,0,0,.86);
+}
+
+.transmission-modal-head{
+  position:relative;
+  padding-right:44px;
+  margin-bottom:14px;
+}
+
+.transmission-modal-head h2{
+  margin:0;
+  text-transform:uppercase;
+  font-size:clamp(30px,6vw,58px);
+  line-height:.95;
+  letter-spacing:2px;
+  text-shadow:0 0 28px rgba(38,232,255,.42);
+}
+
+.transmission-modal-list{
+  max-height:62dvh;
+  overflow:auto;
+  display:grid;
+  gap:10px;
+  padding-right:4px;
+}
+
+.transmission-modal-list .transmission-card{
+  display:grid;
+  grid-template-columns:46px 1fr;
+  gap:12px;
+  padding:13px;
+  border-radius:17px;
+  border:1px solid rgba(38,232,255,.25);
+  background:rgba(0,0,0,.28);
+}
+
+.transmission-modal-list .transmission-card img{
+  width:46px;
+  height:46px;
+  border-radius:13px;
+  object-fit:cover;
+}
+
+.transmission-modal-list .transmission-card strong{
+  color:var(--cyan);
+  font-size:14px;
+  text-transform:uppercase;
+}
+
+.transmission-modal-list .transmission-card p{
+  color:#f0ecfb;
+  margin:4px 0 0;
+  line-height:1.35;
+  font-size:14px;
+}
+
+/* Desktop : on garde le panneau Transmission visible */
+@media(min-width:761px){
+  #openTransmissionBtn{
+    font-size:11px;
+    padding:7px 9px;
+  }
+}
+
+/* Mobile : on enlève le panneau Transmission fixe et on agrandit le réacteur */
+@media(max-width:760px){
+
+  #openTransmissionBtn{
+    font-size:9px !important;
+    padding:4px 6px !important;
+  }
+
+  .tech-panel-head{
+    gap:5px !important;
+  }
+
+  /* Répartition mobile :
+     gauche = infos + tech
+     droite haut = générateur agrandi
+     droite bas = image transmise
+     boutons fixés en bas
+  */
+  .game-grid{
+    grid-template-columns:132px minmax(0,1fr) !important;
+    grid-template-rows:minmax(0,64%) minmax(0,36%) !important;
+    gap:6px !important;
+  }
+
+  .left-column{
+    grid-column:1 !important;
+    grid-row:1 / -1 !important;
+    grid-template-rows:48px 62px minmax(0,1fr) 222px !important;
+  }
+
+  .reactor-panel{
+    grid-column:2 !important;
+    grid-row:1 !important;
+    height:100% !important;
+    min-height:0 !important;
+  }
+
+  .reactor-click img{
+    object-fit:contain !important;
+    object-position:center center !important;
+    transform:scale(1.08);
+    transform-origin:center center;
+  }
+
+  .right-column{
+    display:contents !important;
+  }
+
+  .transmission-panel{
+    display:none !important;
+  }
+
+  .ship-transfer-panel{
+    grid-column:2 !important;
+    grid-row:2 !important;
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    padding:9px !important;
+    border-radius:17px !important;
+    overflow:hidden !important;
+  }
+
+  .ship-transfer-panel h3{
+    font-size:12px !important;
+    line-height:1.1 !important;
+    margin:0 0 7px !important;
+  }
+
+  .ship-transfer-box{
+    height:calc(100% - 30px) !important;
+    min-height:0 !important;
+    border-radius:14px !important;
+  }
+
+  .controls{
+    position:fixed !important;
+    left:calc(132px + 12px) !important;
+    right:6px !important;
+    bottom:calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+    height:44px !important;
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:6px !important;
+    z-index:50 !important;
+  }
+
+  .controls button{
+    height:44px !important;
+    min-height:44px !important;
+    padding:8px !important;
+    border-radius:13px !important;
+    font-size:12px !important;
+  }
+
+  .transmission-modal{
+    padding:10px !important;
+  }
+
+  .transmission-modal-card{
+    width:94vw !important;
+    max-height:86dvh !important;
+    padding:14px !important;
+    border-radius:20px !important;
+  }
+
+  .transmission-modal-head{
+    padding-right:42px !important;
+    margin-bottom:10px !important;
+  }
+
+  .transmission-modal-head h2{
+    font-size:30px !important;
+  }
+
+  .transmission-modal-list{
+    max-height:70dvh !important;
+    gap:8px !important;
+  }
+
+  .transmission-modal-list .transmission-card{
+    grid-template-columns:38px 1fr !important;
+    gap:9px !important;
+    padding:10px !important;
+    border-radius:14px !important;
+  }
+
+  .transmission-modal-list .transmission-card img{
+    width:38px !important;
+    height:38px !important;
+    border-radius:11px !important;
+  }
+
+  .transmission-modal-list .transmission-card strong{
+    font-size:12px !important;
+  }
+
+  .transmission-modal-list .transmission-card p{
+    font-size:12px !important;
+    line-height:1.3 !important;
+  }
+}
+
+@media(max-width:420px){
+  @media(max-width:760px){
+    .game-grid{
+      grid-template-columns:122px minmax(0,1fr) !important;
+      grid-template-rows:minmax(0,64%) minmax(0,36%) !important;
+    }
+
+    .controls{
+      left:calc(122px + 12px) !important;
+      height:42px !important;
+    }
+
+    .controls button{
+      height:42px !important;
+      min-height:42px !important;
+    }
+
+    .reactor-click img{
+      transform:scale(1.06);
+    }
+  }
+}
+
+
+/* =========================================================
+   FIX MOBILE — boutons Pause / Reset propres
+   ========================================================= */
+@media(max-width:760px){
+
+  /* On laisse de la place sous l'image transmise pour les boutons */
+  .game-shell{
+    padding:6px 6px calc(58px + env(safe-area-inset-bottom, 0px)) 6px !important;
+    box-sizing:border-box !important;
+  }
+
+  .game-grid{
+    grid-template-columns:132px minmax(0,1fr) !important;
+    grid-template-rows:minmax(0,64%) minmax(0,36%) !important;
+    overflow:hidden !important;
+  }
+
+  .ship-transfer-panel{
+    padding-bottom:10px !important;
+    overflow:hidden !important;
+  }
+
+  .ship-transfer-box{
+    height:calc(100% - 32px) !important;
+    max-height:100% !important;
+  }
+
+  /* Boutons fixés sous le panneau image, pas par-dessus */
+  .controls{
+    position:fixed !important;
+    left:calc(132px + 12px) !important;
+    right:6px !important;
+    bottom:calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+    width:auto !important;
+    height:46px !important;
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:8px !important;
+    z-index:80 !important;
+    pointer-events:auto !important;
+  }
+
+  .controls button{
+    width:100% !important;
+    height:46px !important;
+    min-height:46px !important;
+    padding:0 !important;
+    border-radius:15px !important;
+    font-size:13px !important;
+    line-height:1 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+}
+
+@media(max-width:420px){
+  @media(max-width:760px){
+    .game-shell{
+      padding:6px 6px calc(54px + env(safe-area-inset-bottom, 0px)) 6px !important;
+    }
+
+    .game-grid{
+      grid-template-columns:122px minmax(0,1fr) !important;
+    }
+
+    .controls{
+      left:calc(122px + 12px) !important;
+      height:42px !important;
+      gap:7px !important;
+    }
+
+    .controls button{
+      height:42px !important;
+      min-height:42px !important;
+      font-size:12px !important;
+      border-radius:14px !important;
+    }
+  }
+}
+
+
+/* =========================================================
+   FIX — cacher Pause / Reset pendant les popups et l'intro
+   ========================================================= */
+@media(max-width:760px){
+
+  body.intro-active .controls,
+  body.modal-active .controls,
+  body.preload-active .controls,
+  body.story-active .controls{
+    display:none !important;
+  }
+
+  body:has(.intro-screen:not([hidden])) .controls,
+  body:has(.intro-overlay:not([hidden])) .controls,
+  body:has(.intro-modal:not([hidden])) .controls,
+  body:has(.story-screen:not([hidden])) .controls,
+  body:has(.preloader:not([hidden])) .controls,
+  body:has(.preload-screen:not([hidden])) .controls,
+  body:has(.tech-info-modal:not([hidden])) .controls,
+  body:has(.tech-manual-modal:not([hidden])) .controls,
+  body:has(.transmission-modal:not([hidden])) .controls,
+  body:has(.game-over-modal:not([hidden])) .controls,
+  body:has(.success-modal:not([hidden])) .controls,
+  body:has(.level-choice-modal:not([hidden])) .controls{
+    display:none !important;
+  }
+
+  .intro-screen,
+  .intro-overlay,
+  .intro-modal,
+  .story-screen,
+  .preloader,
+  .preload-screen,
+  .tech-info-modal,
+  .tech-manual-modal,
+  .transmission-modal,
+  .game-over-modal,
+  .success-modal,
+  .level-choice-modal{
+    z-index:10000 !important;
+  }
+}

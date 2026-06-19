@@ -132,7 +132,7 @@
         </div>
 
         <div class="panel tech-panel">
-          <div class="tech-panel-head"><h3>Technologies</h3><button id="techManualBtn" type="button">ⓘ Infos</button></div>
+          <div class="tech-panel-head"><h3>Technologies</h3><button id="techManualBtn" type="button">ⓘ Infos</button><button id="openTransmissionBtn" type="button">▣ Trans.</button></div>
           <div class="tech-icons">
             <button class="tech-btn" id="coolBtn" data-tech="cool" data-name="Refroidissement d'urgence" data-tooltip="REFROIDISSEMENT D'URGENCE\A Débloqué niveau 2\A Coût : 200 MW\A Effet : réduit fortement la chaleur."><img src="nv_asset/icones/refroidissement.png" alt="Refroidissement"></button>
             <button class="tech-btn" id="plasmaBtn" data-tech="plasma" data-name="Injection plasma" data-tooltip="INJECTION PLASMA\A Débloqué niveau 3\A Coût : 300 MW\A Effet : +3 MW par clic."><img src="nv_asset/icones/injection.png" alt="Injection plasma"></button>
@@ -289,6 +289,20 @@
       </div>
 
       <div class="tech-manual-list" id="techManualList"></div>
+    </div>
+  </div>
+
+
+  <div class="transmission-modal" id="transmissionModal" hidden>
+    <div class="transmission-modal-card">
+      <div class="transmission-modal-head">
+        <div>
+          <p class="eyebrow">Journal CyberCore</p>
+          <h2>Transmissions</h2>
+        </div>
+        <button id="closeTransmissionModalBtn" class="modal-x" type="button" aria-label="Fermer">×</button>
+      </div>
+      <div class="transmission-modal-list" id="transmissionModalList"></div>
     </div>
   </div>
 

@@ -1044,3 +1044,88 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("dragstart", (event) => {
   event.preventDefault();
 });
+
+
+function renderTransmissionModal(){
+  const modalList = document.getElementById("transmissionModalList");
+  const sourceList = document.getElementById("transmissionList");
+  if(!modalList || !sourceList) return;
+
+  const cards = Array.from(sourceList.querySelectorAll(".transmission-card"));
+  if(cards.length === 0){
+    modalList.innerHTML = `<div class="transmission-card"><div></div><div><strong>NOVA</strong><p>Aucune transmission enregistrée pour le moment.</p></div></div>`;
+    return;
+  }
+
+  modalList.innerHTML = cards.map(card => card.outerHTML).join("");
+}
+
+document.getElementById("openTransmissionBtn")?.addEventListener("click", () => {
+  renderTransmissionModal();
+  const modal = document.getElementById("transmissionModal");
+  if(modal) modal.hidden = false;
+  if(typeof state !== "undefined"){
+    state.paused = true;
+  }
+  if(typeof clearLightPoints === "function") clearLightPoints();
+  if(typeof stopGameAmbient === "function") stopGameAmbient();
+});
+
+document.getElementById("closeTransmissionModalBtn")?.addEventListener("click", () => {
+  const modal = document.getElementById("transmissionModal");
+  if(modal) modal.hidden = true;
+  if(typeof state !== "undefined" && !state.gameOver && !state.awaitingLevelChoice){
+    state.paused = false;
+  }
+  const pauseBtn = document.getElementById("pauseBtn");
+  if(pauseBtn) pauseBtn.textContent = "Pause";
+  if(typeof startGameAmbient === "function") startGameAmbient();
+  if(typeof manageLightPoints === "function") manageLightPoints();
+});
+
+
+
+(function(){
+  const modalSelectors = [
+    ".intro-screen",
+    ".intro-overlay",
+    ".intro-modal",
+    ".story-screen",
+    ".preloader",
+    ".preload-screen",
+    ".tech-info-modal",
+    ".tech-manual-modal",
+    ".transmission-modal",
+    ".game-over-modal",
+    ".success-modal",
+    ".level-choice-modal"
+  ];
+
+  function isVisible(el){
+    if(!el) return false;
+    if(el.hidden) return false;
+    const style = window.getComputedStyle(el);
+    return style.display !== "none" && style.visibility !== "hidden" && style.opacity !== "0";
+  }
+
+  function updateModalState(){
+    const hasVisibleModal = modalSelectors.some(sel =>
+      Array.from(document.querySelectorAll(sel)).some(isVisible)
+    );
+    document.body.classList.toggle("modal-active", hasVisibleModal);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateModalState();
+    const observer = new MutationObserver(updateModalState);
+    observer.observe(document.body, {
+      childList:true,
+      subtree:true,
+      attributes:true,
+      attributeFilter:["hidden","class","style"]
+    });
+
+    document.addEventListener("click", () => setTimeout(updateModalState, 0), true);
+    document.addEventListener("pointerdown", () => setTimeout(updateModalState, 0), true);
+  });
+})();
