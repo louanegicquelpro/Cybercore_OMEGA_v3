@@ -79,11 +79,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const pointSoundSrc = "nv_asset/audio/point_lumineux.mp3";
 
-function getLightPointImageSrc(){
-  return window.matchMedia("(max-width: 760px)").matches
-    ? "nv_asset/illustrations_tel/point_lumineux.PNG"
-    : "nv_asset/illustrations_ordi/point_lumineux.PNG";
-}
+  const preloadLightPointVisuals = [
+    "nv_asset/illustrations_ordi/point_lumineux.PNG",
+    "nv_asset/illustrations_tel/point_lumineux.PNG"
+  ].map(src => {
+    const img = new Image();
+    img.src = src;
+    return img;
+  });
 
 
   function playPointSound(){
@@ -438,7 +441,7 @@ function getLightPointImageSrc(){
     const d = difficulty();
     btn.style.left = (d.spreadMin + Math.random() * d.spreadRange) + "%";
     btn.style.top = (d.spreadMin + Math.random() * d.spreadRange) + "%";
-    btn.innerHTML = `<picture><source media="(max-width:760px)" srcset="nv_asset/illustrations_tel/point_lumineux.PNG"><img src="nv_asset/illustrations_ordi/point_lumineux.PNG" alt="Point lumineux"></picture>`;
+    btn.setAttribute("aria-label", "Point lumineux");
     btn.draggable = false;
     const pointImg = btn.querySelector("img");
     if(pointImg){
@@ -1137,31 +1140,3 @@ document.getElementById("closeTransmissionModalBtn")?.addEventListener("click", 
     document.addEventListener("pointerdown", () => setTimeout(updateModalState, 0), true);
   });
 })();
-
-
-function ensureLightPointImages(){
-  document.querySelectorAll(".light-point").forEach(point => {
-    let img = point.querySelector("img");
-    if(!img){
-      img = document.createElement("img");
-      img.alt = "Point lumineux";
-      point.appendChild(img);
-    }
-    img.src = getLightPointImageSrc();
-    img.onerror = () => {
-      img.style.display = "none";
-      point.classList.add("fallback-light-point");
-    };
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const layer = document.getElementById("pointLayer");
-  if(layer){
-    const lightPointObserver = new MutationObserver(() => ensureLightPointImages());
-    lightPointObserver.observe(layer, { childList:true, subtree:true });
-  }
-  ensureLightPointImages();
-});
-
-window.addEventListener("resize", ensureLightPointImages);

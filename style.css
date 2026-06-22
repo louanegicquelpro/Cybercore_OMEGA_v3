@@ -3187,52 +3187,69 @@ html,body,button,.reactor-click,.light-point,.tech-btn{
 
 
 /* =========================================================
-   FIX POINT LUMINEUX — visibilité téléphone + ordinateur
+   FIX POINT LUMINEUX + ICÔNE SITE
+   Le point lumineux n'utilise plus une balise <img>.
+   Il est affiché en CSS pour éviter l'icône cassée.
    ========================================================= */
+
 .light-point{
   width:clamp(125px, 11vw, 185px) !important;
   height:clamp(125px, 11vw, 185px) !important;
   border:0 !important;
+  padding:0 !important;
   background:transparent !important;
   pointer-events:auto !important;
-  z-index:80 !important;
+  z-index:90 !important;
+  position:absolute !important;
+  display:grid !important;
+  place-items:center !important;
+  cursor:pointer !important;
 }
 
-.light-point img{
-  width:100% !important;
-  height:100% !important;
-  display:block !important;
-  object-fit:contain !important;
-  opacity:1 !important;
-  visibility:visible !important;
-  filter:
-    drop-shadow(0 0 18px #fff)
-    drop-shadow(0 0 36px rgba(38,232,255,.95))
-    drop-shadow(0 0 70px rgba(255,43,214,.78)) !important;
+/* cache toute ancienne image si elle existe encore */
+.light-point img,
+.light-point picture,
+.light-point source{
+  display:none !important;
 }
 
-.light-point.fallback-light-point::after{
+/* image réelle du point lumineux */
+.light-point::after{
   content:"";
   position:absolute;
-  inset:18%;
-  border-radius:50%;
-  background:
-    radial-gradient(circle, #fff 0 14%, rgba(255,255,255,.95) 15% 24%, rgba(38,232,255,.62) 25% 48%, rgba(255,43,214,.20) 49% 70%, transparent 72%);
-  box-shadow:
-    0 0 22px #fff,
-    0 0 46px rgba(38,232,255,.95),
-    0 0 80px rgba(255,43,214,.70);
+  inset:0;
+  background-image:url("nv_asset/illustrations_ordi/point_lumineux.PNG");
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  filter:
+    drop-shadow(0 0 18px #ffffff)
+    drop-shadow(0 0 36px rgba(38,232,255,.95))
+    drop-shadow(0 0 72px rgba(255,43,214,.78));
+  animation:pointPulse .42s alternate infinite;
 }
 
+/* cercle volontairement discret autour */
 .light-point::before{
-  inset:37% !important;
-  border:1px solid rgba(255,255,255,.22) !important;
-  box-shadow:0 0 10px rgba(255,255,255,.16),0 0 18px rgba(38,232,255,.12) !important;
+  content:"";
+  position:absolute;
+  inset:38% !important;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.20) !important;
+  box-shadow:
+    0 0 10px rgba(255,255,255,.14),
+    0 0 18px rgba(38,232,255,.10) !important;
+  animation:ring .9s infinite;
+  z-index:2;
 }
 
 @media(max-width:760px){
   .light-point{
-    width:clamp(105px, 27vw, 145px) !important;
-    height:clamp(105px, 27vw, 145px) !important;
+    width:clamp(110px, 28vw, 150px) !important;
+    height:clamp(110px, 28vw, 150px) !important;
+  }
+
+  .light-point::after{
+    background-image:url("nv_asset/illustrations_tel/point_lumineux.PNG");
   }
 }
