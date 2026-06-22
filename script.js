@@ -79,6 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const pointSoundSrc = "nv_asset/audio/point_lumineux.mp3";
 
+function getLightPointImageSrc(){
+  return window.matchMedia("(max-width: 760px)").matches
+    ? "nv_asset/illustrations_tel/point_lumineux.PNG"
+    : "nv_asset/illustrations_ordi/point_lumineux.PNG";
+}
+
+
   function playPointSound(){
     if(!audioReady || !soundEnabled) return;
     const pointAudio = new Audio(pointSoundSrc);
@@ -92,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "nv_asset/illustrations_ordi/2Univer_planete.PNG","nv_asset/illustrations_tel/2Univers_planete.PNG",
     "nv_asset/illustrations_ordi/3planete.PNG","nv_asset/illustrations_tel/3planete.PNG",
     "nv_asset/illustrations_ordi/4porte.PNG","nv_asset/illustrations_tel/4porte.PNG",
-    "nv_asset/illustrations_ordi/point_lumineux.png","nv_asset/illustrations_tel/point_lumineux.png",
+    "nv_asset/illustrations_ordi/point_lumineux.PNG","nv_asset/illustrations_tel/point_lumineux.PNG",
     "nv_asset/characters/IA.png","nv_asset/characters/robot.png",
     "nv_asset/generateur_ordi/1.PNG","nv_asset/generateur_tel/1.PNG",
     "nv_asset/icones/refroidissement.png","nv_asset/icones/injection.png","nv_asset/icones/batterie.png","nv_asset/icones/stabilisateur.png","nv_asset/icones/bouclier.png",
@@ -431,7 +438,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const d = difficulty();
     btn.style.left = (d.spreadMin + Math.random() * d.spreadRange) + "%";
     btn.style.top = (d.spreadMin + Math.random() * d.spreadRange) + "%";
-    btn.innerHTML = `<picture><source media="(max-width:760px)" srcset="nv_asset/illustrations_tel/point_lumineux.png"><img src="nv_asset/illustrations_ordi/point_lumineux.png" alt="Point lumineux"></picture>`;
+    btn.innerHTML = `<picture><source media="(max-width:760px)" srcset="nv_asset/illustrations_tel/point_lumineux.PNG"><img src="nv_asset/illustrations_ordi/point_lumineux.PNG" alt="Point lumineux"></picture>`;
     btn.draggable = false;
     const pointImg = btn.querySelector("img");
     if(pointImg){
@@ -1130,3 +1137,31 @@ document.getElementById("closeTransmissionModalBtn")?.addEventListener("click", 
     document.addEventListener("pointerdown", () => setTimeout(updateModalState, 0), true);
   });
 })();
+
+
+function ensureLightPointImages(){
+  document.querySelectorAll(".light-point").forEach(point => {
+    let img = point.querySelector("img");
+    if(!img){
+      img = document.createElement("img");
+      img.alt = "Point lumineux";
+      point.appendChild(img);
+    }
+    img.src = getLightPointImageSrc();
+    img.onerror = () => {
+      img.style.display = "none";
+      point.classList.add("fallback-light-point");
+    };
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const layer = document.getElementById("pointLayer");
+  if(layer){
+    const lightPointObserver = new MutationObserver(() => ensureLightPointImages());
+    lightPointObserver.observe(layer, { childList:true, subtree:true });
+  }
+  ensureLightPointImages();
+});
+
+window.addEventListener("resize", ensureLightPointImages);
