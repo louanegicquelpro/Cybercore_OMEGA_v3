@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "nv_asset/illustrations_ordi/2Univer_planete.PNG","nv_asset/illustrations_tel/2Univers_planete.PNG",
     "nv_asset/illustrations_ordi/3planete.PNG","nv_asset/illustrations_tel/3planete.PNG",
     "nv_asset/illustrations_ordi/4porte.PNG","nv_asset/illustrations_tel/4porte.PNG",
-    "nv_asset/illustrations_ordi/point_lumineux.PNG","nv_asset/illustrations_tel/point_lumineux.PNG",
+    "nv_asset/illustrations_ordi/point_lumineux.png","nv_asset/illustrations_tel/point_lumineux.png",
     "nv_asset/characters/IA.png","nv_asset/characters/robot.png",
     "nv_asset/generateur_ordi/1.PNG","nv_asset/generateur_tel/1.PNG",
     "nv_asset/icones/refroidissement.png","nv_asset/icones/injection.png","nv_asset/icones/batterie.png","nv_asset/icones/stabilisateur.png","nv_asset/icones/bouclier.png",
