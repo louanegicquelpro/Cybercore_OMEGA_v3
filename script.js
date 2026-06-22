@@ -1,14 +1,6 @@
 /* =========================================================
-
-   Sections principales :
-   - Introduction narrative
-   - Audio et transmissions
-   - Niveaux et objectifs
-   - Technologies
-   - Chaleur, surcharges et points lumineux
-   - Popups et responsive mobile
+   CYBERCORE OMEGA — SCRIPT.JS
    ========================================================= */
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
@@ -94,7 +86,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const pointSoundSrc = "nv_asset/audio/point_lumineux.mp3";
 
-  function playPointSound(){
+    /* ---------------------------------------------------------
+     Joue le petit son quand un point lumineux apparaît.
+     La fonction ne joue rien si :
+     - l’audio n’est pas encore autorisé par le navigateur
+     - le son est désactivé par le joueur
+     --------------------------------------------------------- */
+function playPointSound(){
     if(!audioReady || !soundEnabled) return;
     const pointAudio = new Audio(pointSoundSrc);
     pointAudio.volume = 1.0;
@@ -121,7 +119,13 @@ document.addEventListener("DOMContentLoaded", () => {
     preloadPercent.textContent = percent + "%";
   }
 
-  function preloadImage(src){
+    /* ---------------------------------------------------------
+     Précharge une image.
+     Cela évite les bugs où une image apparaît avec du retard.
+     La fonction renvoie true si l’image charge,
+     false si elle échoue ou prend trop de temps.
+     --------------------------------------------------------- */
+function preloadImage(src){
     return new Promise(resolve => {
       const img = new Image();
       img.onload = () => resolve(true);
@@ -132,7 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  async function preloadAll(){
+    /* ---------------------------------------------------------
+     Précharge tous les assets listés dans assetsToPreload.
+     Met à jour la barre de chargement au fur et à mesure.
+     --------------------------------------------------------- */
+async function preloadAll(){
     let done = 0;
     for(const asset of assetsToPreload){
       preloadText.textContent = "Chargement...";
@@ -143,10 +151,20 @@ document.addEventListener("DOMContentLoaded", () => {
     preloadText.textContent = "Chargement terminé. Prêt à lancer la séquence.";
   }
 
-  function safePlay(audio){ if(audio && soundEnabled) audio.play().catch(() => {}); }
+    /* ---------------------------------------------------------
+     Lance un son sans bloquer le jeu.
+     Certains navigateurs refusent l’audio avant une action utilisateur :
+     le catch évite une erreur rouge dans la console.
+     --------------------------------------------------------- */
+function safePlay(audio){ if(audio && soundEnabled) audio.play().catch(() => {}); }
   function stopAudio(audio){ if(audio){ audio.pause(); audio.currentTime = 0; } }
 
-  function stopCurrentVoiceOnly(){
+    /* ---------------------------------------------------------
+     Coupe uniquement la voix en cours.
+     Utilisé quand on change de visuel ou de niveau.
+     Ne coupe pas forcément toute la musique du jeu.
+     --------------------------------------------------------- */
+function stopCurrentVoiceOnly(){
     audioQueue = [];
     queuePlaying = false;
     audioTimeouts.forEach(id => clearTimeout(id));
@@ -170,7 +188,15 @@ document.addEventListener("DOMContentLoaded", () => {
     clearAudioQueue(true);
   }
 
-  function addTransmission(speakerKey, text){
+    /* ---------------------------------------------------------
+     Ajoute une carte dans le journal de transmission.
+     speakerKey permet de choisir l’avatar :
+     - NOVA
+     - Automatron
+     - System
+     On garde seulement les 8 dernières transmissions.
+     --------------------------------------------------------- */
+function addTransmission(speakerKey, text){
     const list = document.getElementById("transmissionList");
     const speaker = characters[speakerKey] || characters.NOVA;
     const card = document.createElement("div");
@@ -180,7 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
     while(list.children.length > 8) list.lastElementChild.remove();
   }
 
-  function clearAudioQueue(stopCurrent = true){
+    /* ---------------------------------------------------------
+     Vide la file d’attente audio.
+     Utile lors du reset, du game over ou du changement de niveau.
+     --------------------------------------------------------- */
+function clearAudioQueue(stopCurrent = true){
     audioQueue = [];
     queuePlaying = false;
     audioTimeouts.forEach(id => clearTimeout(id));
@@ -193,13 +223,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if(currentGameAmbient) currentGameAmbient.volume = 0.16;
   }
 
-  function enqueueVoice(payload, delay = 0){
+    /* ---------------------------------------------------------
+     Ajoute une voix dans une file d’attente.
+     Cela évite que deux personnages parlent en même temps.
+     --------------------------------------------------------- */
+function enqueueVoice(payload, delay = 0){
     if(!payload?.src) return;
     audioQueue.push({ payload, delay });
     processVoiceQueue();
   }
 
-  function processVoiceQueue(){
+    /* ---------------------------------------------------------
+     Lit les voix une par une.
+     Quand une voix se termine, la suivante démarre automatiquement.
+     Pendant une voix, la musique de fond est baissée.
+     --------------------------------------------------------- */
+function processVoiceQueue(){
     if(queuePlaying || !audioQueue.length || !audioReady || !soundEnabled) return;
 
     queuePlaying = true;
@@ -251,7 +290,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if(src) playVoice({ src, speaker:"NOVA", text:"Transmission vocale en cours." });
   }
 
-  function startGameAmbient(){
+    /* ---------------------------------------------------------
+     Lance la musique de fond selon le niveau actuel.
+     Niveaux 1-2 : Lvl1-2.mp3
+     Niveaux 3-6 : Lvl3-6.mp3
+     Niveau 7 : Lvl7.mp3
+     Niveau 8 : Lvl8.mp3
+     --------------------------------------------------------- */
+function startGameAmbient(){
     if(!soundEnabled || state.paused || state.gameOver) return;
     let src = "";
     if(state.level <= 2) src = gameAmbients.level1;
@@ -274,7 +320,12 @@ document.addEventListener("DOMContentLoaded", () => {
     stopGameAmbient();
   }
 
-  enterBtn.addEventListener("click", () => {
+    /* ---------------------------------------------------------
+     Bouton "Entrer dans CyberCore".
+     Le son ne peut démarrer qu’après une interaction utilisateur,
+     donc on lance les sons d’intro ici.
+     --------------------------------------------------------- */
+enterBtn.addEventListener("click", () => {
     startIntroSounds();
     preloader.classList.add("hidden");
     setTimeout(() => preloader.remove(), 500);
@@ -303,7 +354,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* DÉMARRAGE DU JEU */
-  function openGame(){
+    /* ---------------------------------------------------------
+     Passe de l’introduction au jeu.
+     Actions :
+     - coupe les sons d’intro
+     - masque les écrans narratifs
+     - affiche l’interface du jeu
+     - initialise le temps
+     - lance la musique du niveau 1
+     - lance les premiers événements audio
+     --------------------------------------------------------- */
+function openGame(){
     stopIntroSounds();
     stopCurrentVoiceOnly();
     Object.values(screens).forEach(section => {
@@ -324,11 +385,19 @@ document.addEventListener("DOMContentLoaded", () => {
     manageLightPoints();
   }
 
-  document.querySelectorAll(".next-btn").forEach(button => {
+    /* ---------------------------------------------------------
+     Boutons "Continuer" de l’introduction.
+     Ils passent d’un visuel narratif au suivant.
+     --------------------------------------------------------- */
+document.querySelectorAll(".next-btn").forEach(button => {
     button.addEventListener("click", () => showScreen(button.closest("section"), button.dataset.next));
   });
   document.querySelectorAll(".skip-btn").forEach(button => button.addEventListener("click", openGame));
-  document.getElementById("startGameBtn").addEventListener("click", openGame);
+    /* ---------------------------------------------------------
+     Bouton "Commencer" du visuel 4.
+     Il lance l’interface de jeu.
+     --------------------------------------------------------- */
+document.getElementById("startGameBtn").addEventListener("click", openGame);
 
   /* CONFIGURATION DES NIVEAUX */
   const levels = [
@@ -366,8 +435,16 @@ document.addEventListener("DOMContentLoaded", () => {
     pointLayer:document.getElementById("pointLayer")
   };
 
-  function levelData(){ return levels.find(l => l.n === state.level) || levels[levels.length - 1]; }
-  function getTechCost(key){
+    /* ---------------------------------------------------------
+     Renvoie les données du niveau actuel :
+     numéro du niveau et objectif d’énergie.
+     --------------------------------------------------------- */
+function levelData(){ return levels.find(l => l.n === state.level) || levels[levels.length - 1]; }
+    /* ---------------------------------------------------------
+     Calcule le coût actuel d’une technologie.
+     Plus une technologie est utilisée, plus son prix augmente.
+     --------------------------------------------------------- */
+function getTechCost(key){
     const tech = techs[key];
     if(!tech) return 0;
     const used = state.techCostLevels?.[key] || 0;
@@ -378,14 +455,25 @@ document.addEventListener("DOMContentLoaded", () => {
   function currentTarget(){ return levelData().target; }
   function previousTarget(){ if(state.level <= 1) return 0; const prev = levels.find(l => l.n === state.level - 1); return prev ? prev.target : 0; }
 
-  function rawProgress(){
+    /* ---------------------------------------------------------
+     Calcule la progression brute du niveau.
+     Exemple :
+     niveau 1 = objectif 100 MW
+     si énergie = 50 MW => 50%
+     --------------------------------------------------------- */
+function rawProgress(){
     const target = currentTarget();
     if(target === Infinity) return 100;
     const prev = previousTarget();
     return Math.max(0, Math.min(100, ((state.energy - prev) / (target - prev)) * 100));
   }
 
-  function stableProgress(){
+    /* ---------------------------------------------------------
+     Calcule une progression qui ne diminue jamais.
+     Si le joueur utilise de l’énergie, la barre ne recule pas :
+     elle stagne jusqu’à ce que l’énergie remonte.
+     --------------------------------------------------------- */
+function stableProgress(){
     const stable = Math.max(state.maxProgressByLevel[state.level] || 0, rawProgress());
     state.maxProgressByLevel[state.level] = stable;
     return stable;
@@ -394,7 +482,14 @@ document.addEventListener("DOMContentLoaded", () => {
   function currentDisplayedProgress(){ return state.maxProgressByLevel[state.level] || 0; }
 
   /* DIFFICULTÉ PAR NIVEAU */
-  function difficulty(){
+    /* ---------------------------------------------------------
+     Paramètres de difficulté selon le niveau.
+     Plus le niveau monte :
+     - plus la chaleur augmente vite
+     - plus les points lumineux apparaissent vite
+     - moins ils restent longtemps
+     --------------------------------------------------------- */
+function difficulty(){
     const lvl = state.level;
     const settings = {
       1: { heatPerClick: 0.75, pointCooldown: 1500, pointLifetime: 3200, spreadMin: 16, spreadRange: 62, pointCooling: 24 },
@@ -409,7 +504,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return settings[lvl] || settings[8];
   }
 
-  function updateReactorImage(){
+    /* ---------------------------------------------------------
+     Change l’image du générateur selon le niveau.
+     Desktop : nv_asset/generateur_ordi/
+     Mobile : nv_asset/generateur_tel/
+     --------------------------------------------------------- */
+function updateReactorImage(){
     const level = Math.max(1, Math.min(8, state.level));
     els.reactorImage.src = `nv_asset/generateur_ordi/${level}.PNG`;
     els.reactorSourceTel.srcset = `nv_asset/generateur_tel/${level}.PNG`;
@@ -421,7 +521,13 @@ document.addEventListener("DOMContentLoaded", () => {
     playVoice(payload, delay);
   }
 
-  function triggerAudioEvents(){
+    /* ---------------------------------------------------------
+     Déclenche les dialogues selon :
+     - le niveau actuel
+     - la progression du niveau
+     Chaque dialogue est joué une seule fois.
+     --------------------------------------------------------- */
+function triggerAudioEvents(){
     const p = currentDisplayedProgress();
     if(state.level === 1){ if(p >= 0) markAndPlay("l1_0", eventAudios.l1_0); if(p >= 25) markAndPlay("l1_25", eventAudios.l1_25); if(p >= 65) markAndPlay("l1_65", eventAudios.l1_65); }
     if(state.level === 2){ if(p >= 0){ if(!state.level2RobotSpoken){ state.level2RobotSpoken = true; updateTechButtons(); } markAndPlay("l2_auto_0", eventAudios.l2_auto_0); markAndPlay("l2_nova_0", eventAudios.l2_nova_0, 250); } if(p >= 25){ markAndPlay("l2_auto_25", eventAudios.l2_auto_25); markAndPlay("l2_nova_25", eventAudios.l2_nova_25, 250); } if(p >= 75){ markAndPlay("l2_auto_75", eventAudios.l2_auto_75); markAndPlay("l2_nova_75", eventAudios.l2_nova_75, 250); } }
@@ -433,7 +539,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if(state.level === 8 && p >= 0){ markAndPlay("l8_auto_1", eventAudios.l8_auto_1); markAndPlay("l8_nova_1", eventAudios.l8_nova_1, 250); markAndPlay("l8_auto_2", eventAudios.l8_auto_2, 500); markAndPlay("l8_nova_2", eventAudios.l8_nova_2, 750); }
   }
 
-  function clearLightPoints(){
+    /* ---------------------------------------------------------
+     Supprime tous les points lumineux présents.
+     Utilisé avec pause, reset, game over et popup.
+     --------------------------------------------------------- */
+function clearLightPoints(){
     els.pointLayer.innerHTML = "";
     state.activePoint = false;
     if(pointTimer) clearTimeout(pointTimer);
@@ -441,7 +551,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* POINTS LUMINEUX */
-  function spawnLightPoint(){
+    /* ---------------------------------------------------------
+     Crée un point lumineux lorsque la chaleur dépasse 80%.
+     Le point utilise UNIQUEMENT :
+     - nv_asset/illustrations_ordi/point_lumineux.png
+     - nv_asset/illustrations_tel/point_lumineux.png
+
+     Si le joueur clique dessus :
+     - la chaleur diminue
+
+     Si le joueur le rate :
+     - une surcharge est ajoutée
+     --------------------------------------------------------- */
+function spawnLightPoint(){
     if(gameShell.hidden || state.paused || state.gameOver || state.heat < 80 || state.activePoint) return;
 
     state.activePoint = true;
@@ -514,7 +636,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }, difficulty().pointLifetime);
   }
 
-  function manageLightPoints(){
+    /* ---------------------------------------------------------
+     Vérifie si les points lumineux doivent apparaître.
+     Tant que la chaleur est sous 80%, aucun point n’apparaît.
+     --------------------------------------------------------- */
+function manageLightPoints(){
     els.reactorPanel.classList.toggle("critical-pulse", state.heat >= 80 && !state.gameOver);
 
     if(state.heat < 80){
@@ -580,7 +706,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function updateTechButtons(){
+    /* ---------------------------------------------------------
+     Met à jour l’apparence des technologies :
+     - locked : pas encore débloquée par le niveau
+     - unlocked unaffordable : débloquée mais pas assez d’énergie
+     - unlocked affordable : utilisable maintenant
+     --------------------------------------------------------- */
+function updateTechButtons(){
     document.querySelectorAll(".tech-btn").forEach(btn => {
       const techKey = btn.dataset.tech;
       const tech = techs[techKey];
@@ -596,7 +728,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function updateUI(){
+    /* ---------------------------------------------------------
+     Met à jour tous les textes et barres visibles :
+     - énergie
+     - clics
+     - chaleur
+     - surcharges
+     - progression de décodage
+     - état du système
+     --------------------------------------------------------- */
+function updateUI(){
     const target = currentTarget();
     const progress = Math.round(stableProgress());
     const heat = Math.round(state.heat);
@@ -745,7 +886,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${min}:${sec}`;
   }
 
-  function showGameOver(reason){
+    /* ---------------------------------------------------------
+     Affiche la popup Game Over.
+     Montre :
+     - niveau atteint
+     - énergie finale
+     - nombre de clics
+     - énergie utilisée
+     - durée
+     - technologies utilisées
+     --------------------------------------------------------- */
+function showGameOver(reason){
     clearAudioQueue(true);
     if(currentGameAmbient) currentGameAmbient.volume = 0.06;
     if(ambientAudio) ambientAudio.volume = 0.06;
@@ -1051,7 +1202,11 @@ document.addEventListener("DOMContentLoaded", () => {
     manageLightPoints();
   });
 
-  function showUnlockedTechPopupForLevel(){
+    /* ---------------------------------------------------------
+     Affiche une popup quand une nouvelle technologie
+     est débloquée à un niveau précis.
+     --------------------------------------------------------- */
+function showUnlockedTechPopupForLevel(){
     if(!state.techPopupsShown) state.techPopupsShown = {};
     const unlockByLevel = {2:"cool",3:"plasma",4:"battery",5:"stabilizer",6:"shield"};
     const key = unlockByLevel[state.level];
@@ -1070,6 +1225,11 @@ document.addEventListener("dragstart", (event) => {
 });
 
 
+  /* ---------------------------------------------------------
+     Copie les transmissions visibles dans la popup mobile.
+     Ainsi, sur téléphone, le joueur peut lire les transmissions
+     sans garder un gros panneau affiché en permanence.
+     --------------------------------------------------------- */
 function renderTransmissionModal(){
   const modalList = document.getElementById("transmissionModalList");
   const sourceList = document.getElementById("transmissionList");

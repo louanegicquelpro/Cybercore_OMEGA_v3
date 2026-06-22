@@ -1,4 +1,19 @@
 /* =========================================================
+   GUIDE RAPIDE DU CSS
+
+   Les grandes sections du fichier :
+   1. variables globales : couleurs principales
+   2. intro : écrans narratifs avant le jeu
+   3. game-shell : interface principale
+   4. left-column : énergie, stats, technologies
+   5. reactor-panel : générateur central
+   6. light-point : point lumineux uniquement en PNG
+   7. right-column : image transmise + transmission desktop
+   8. popups : game over, technologies, transmissions
+   9. responsive : adaptation téléphone
+   ========================================================= */
+
+/* =========================================================
    CYBERCORE OMEGA — STYLE.CSS
    Version lisible et commentée
    ---------------------------------------------------------
@@ -1534,6 +1549,7 @@ body::after {
 
 
 /* =========================================================
+   CORRECTIFS FINAUX V11
    ---------------------------------------------------------
    - bouton Trans. caché sur ordinateur
    - bouton Trans. visible seulement sur téléphone
