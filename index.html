@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>CyberCore Omega</title>
-  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%2302040b"/><circle cx="32" cy="32" r="18" fill="%2326e8ff" opacity="0.28"/><path d="M32 8 L37 27 L56 32 L37 37 L32 56 L27 37 L8 32 L27 27 Z" fill="white"/><circle cx="32" cy="32" r="6" fill="%2326e8ff"/></svg>' type="image/svg+xml" />
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%2302040b"/><path d="M32 6 L38 26 L58 32 L38 38 L32 58 L26 38 L6 32 L26 26 Z" fill="%23ffffff"/><circle cx="32" cy="32" r="8" fill="%2326e8ff"/></svg>' type="image/svg+xml" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body class="screen-1">
+
+  <!-- ÉCRAN DE CHARGEMENT -->
   <div class="preloader" id="preloader">
     <div class="preloader-card">
       <div class="loader-orb"></div>
@@ -21,6 +23,7 @@
     </div>
   </div>
 
+  <!-- INTRO NARRATIVE -->
   <main class="intro-page" id="introPage">
     <section class="intro-screen active" id="visual1">
       <div class="intro-card">
@@ -92,6 +95,7 @@
     </section>
   </main>
 
+  <!-- INTERFACE PRINCIPALE DU JEU -->
   <main class="game-shell" id="gameShell" hidden>
     <header class="game-header">
       <div class="project-label">Projet classification / Cybercore OMEGA</div>
@@ -186,6 +190,7 @@
   </main>
 
 
+  <!-- POPUP GAME OVER -->
   <div class="game-over-modal" id="gameOverModal" hidden>
     <div class="game-over-card">
       <p class="eyebrow">CyberCore Omega</p>

@@ -1,3 +1,16 @@
+/* =========================================================
+   CYBERCORE OMEGA — SCRIPT.JS
+   Version commentée et corrigée
+
+   Sections principales :
+   - Introduction narrative
+   - Audio et transmissions
+   - Niveaux et objectifs
+   - Technologies
+   - Chaleur, surcharges et points lumineux
+   - Popups et responsive mobile
+   ========================================================= */
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
@@ -9,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const preloadText = document.getElementById("preloadText");
   const enterBtn = document.getElementById("enterBtn");
 
+  /* ÉCRANS D'INTRODUCTION */
   const screens = {
     visual1: document.getElementById("visual1"),
     visual2: document.getElementById("visual2"),
@@ -16,12 +30,14 @@ document.addEventListener("DOMContentLoaded", () => {
     visual4: document.getElementById("visual4")
   };
 
+  /* PERSONNAGES */
   const characters = {
     NOVA: { name:"NOVA", avatar:"nv_asset/characters/IA.png" },
     Automatron: { name:"AUTOMATRON", avatar:"nv_asset/characters/robot.png" },
     System: { name:"SYSTÈME", avatar:"nv_asset/characters/IA.png" }
   };
 
+  /* AUDIO : INTRO + AMBIANCES */
   const introAudios = {
     ambient: "nv_asset/sons_fond/Debut-generateur.mp3",
     visual2: "nv_asset/audio/NOVA/Visu2.mp3",
@@ -37,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     level8: "nv_asset/sons_fond/Lvl8.mp3"
   };
 
+  /* DIALOGUES PAR NIVEAU */
   const eventAudios = {
     l1_0: { src:"nv_asset/audio/NOVA/Lvl1-0.mp3", speaker:"NOVA", text:"Ce dispositif semble réagir à notre présence. Votre outil Clicker semble activer le mécanisme, je reçois un signal intensifié. Vous devriez peut-être vous référer au protocole avant de continuer Éclaireur Eleven !" },
     l1_25: { src:"nv_asset/audio/NOVA/Lvl1-25.mp3", speaker:"NOVA", text:"Éclaireur Eleven, je ne parviens pas à décrypter les données récoltées par votre outil Clicker. J’ai besoin davantage de temps pour sécuriser l’environnement électromagnétique. Si vous continuez, je devrais le notifier dans le journal de transmission." },
@@ -79,16 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const pointSoundSrc = "nv_asset/audio/point_lumineux.mp3";
 
-  const preloadLightPointVisuals = [
-    "nv_asset/illustrations_ordi/point_lumineux.PNG",
-    "nv_asset/illustrations_tel/point_lumineux.PNG"
-  ].map(src => {
-    const img = new Image();
-    img.src = src;
-    return img;
-  });
-
-
   function playPointSound(){
     if(!audioReady || !soundEnabled) return;
     const pointAudio = new Audio(pointSoundSrc);
@@ -96,13 +103,14 @@ document.addEventListener("DOMContentLoaded", () => {
     pointAudio.play().catch(() => {});
   }
 
+  /* PRÉCHARGEMENT DES ASSETS */
   const assetsToPreload = [
     "nv_asset/illustrations_ordi/1Univers.PNG","nv_asset/illustrations_tel/1Univers.PNG",
     "nv_asset/illustrations_ordi/vaisseau.png","nv_asset/illustrations_tel/vaisseau.png",
     "nv_asset/illustrations_ordi/2Univer_planete.PNG","nv_asset/illustrations_tel/2Univers_planete.PNG",
     "nv_asset/illustrations_ordi/3planete.PNG","nv_asset/illustrations_tel/3planete.PNG",
     "nv_asset/illustrations_ordi/4porte.PNG","nv_asset/illustrations_tel/4porte.PNG",
-    "nv_asset/illustrations_ordi/point_lumineux.PNG","nv_asset/illustrations_tel/point_lumineux.PNG",
+    "nv_asset/illustrations_ordi/point_lumineux.png","nv_asset/illustrations_tel/point_lumineux.png",
     "nv_asset/characters/IA.png","nv_asset/characters/robot.png",
     "nv_asset/generateur_ordi/1.PNG","nv_asset/generateur_tel/1.PNG",
     "nv_asset/icones/refroidissement.png","nv_asset/icones/injection.png","nv_asset/icones/batterie.png","nv_asset/icones/stabilisateur.png","nv_asset/icones/bouclier.png",
@@ -296,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 240);
   }
 
+  /* DÉMARRAGE DU JEU */
   function openGame(){
     stopIntroSounds();
     stopCurrentVoiceOnly();
@@ -323,11 +332,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".skip-btn").forEach(button => button.addEventListener("click", openGame));
   document.getElementById("startGameBtn").addEventListener("click", openGame);
 
+  /* CONFIGURATION DES NIVEAUX */
   const levels = [
     { n:1, target:100 }, { n:2, target:300 }, { n:3, target:500 }, { n:4, target:1000 },
     { n:5, target:1500 }, { n:6, target:2500 }, { n:7, target:5000 }, { n:8, target:Infinity }
   ];
 
+  /* TECHNOLOGIES */
   const techs = {
     cool: { unlock:2, baseCost:200, multiplier:1.28, action: () => { state.heat = Math.max(0, state.heat - 35); state.coolings++; } },
     plasma: { unlock:3, baseCost:300, multiplier:1.35, action: () => { state.clickPower += 3; } },
@@ -336,6 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
     shield: { unlock:6, baseCost:5000, multiplier:1.42, action: () => { state.shield++; } }
   };
 
+  /* ÉTAT GLOBAL DU JEU */
   const state = {
     energy:0, clickPower:1, clicks:0, coolings:0, overloads:0,
     heat:0, level:1, autoEnergy:0, heatReduction:0, paused:false, shield:0, gameOver:false,
@@ -383,6 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function currentDisplayedProgress(){ return state.maxProgressByLevel[state.level] || 0; }
 
+  /* DIFFICULTÉ PAR NIVEAU */
   function difficulty(){
     const lvl = state.level;
     const settings = {
@@ -429,6 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pointTimer = null;
   }
 
+  /* POINTS LUMINEUX */
   function spawnLightPoint(){
     if(gameShell.hidden || state.paused || state.gameOver || state.heat < 80 || state.activePoint) return;
 
@@ -441,11 +455,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const d = difficulty();
     btn.style.left = (d.spreadMin + Math.random() * d.spreadRange) + "%";
     btn.style.top = (d.spreadMin + Math.random() * d.spreadRange) + "%";
-    btn.setAttribute("aria-label", "Point lumineux");
+    btn.innerHTML = `<picture><source media="(max-width:760px)" srcset="nv_asset/illustrations_tel/point_lumineux.png"><img src="nv_asset/illustrations_ordi/point_lumineux.png" alt="Point lumineux"></picture>`;
     btn.draggable = false;
     const pointImg = btn.querySelector("img");
     if(pointImg){
       pointImg.draggable = false;
+      pointImg.onerror = () => console.warn("Point lumineux introuvable :", pointImg.currentSrc || pointImg.src);
     }
 
     let resolved = false;

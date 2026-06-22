@@ -1,3255 +1,1986 @@
-
-:root{--bg:#05050b;--panel:rgba(10,12,24,.78);--text:#f7f4ff;--muted:#b7b0ca;--cyan:#26e8ff;--pink:#ff2bd6;--purple:#8b5cff;--red:#ff3a63;--green:#68ff8a;--border:rgba(255,255,255,.14)}
-*{box-sizing:border-box}
-[hidden]{display:none!important}
-html,body{margin:0;min-height:100%}
-body{min-height:100dvh;font-family:Inter,Arial,sans-serif;color:var(--text);overflow:hidden;background:#020208}
-body.screen-1{background:linear-gradient(rgba(2,2,8,.25),rgba(2,2,8,.34)),url("nv_asset/illustrations_ordi/1Univers.PNG") center/cover no-repeat fixed,#020208}
-body.screen-2{background:linear-gradient(rgba(0,0,8,.18),rgba(0,0,12,.30)),url("nv_asset/illustrations_ordi/2Univer_planete.PNG") center/cover no-repeat fixed,#020208}
-body.screen-3{background:linear-gradient(rgba(0,0,8,.16),rgba(0,0,12,.28)),url("nv_asset/illustrations_ordi/3planete.PNG") center/cover no-repeat fixed,#020208}
-body.screen-4{background:linear-gradient(rgba(0,0,8,.18),rgba(0,0,12,.30)),url("nv_asset/illustrations_ordi/4porte.PNG") center/cover no-repeat fixed,#020208}
-body.game-mode{background:radial-gradient(circle at 8% 8%,rgba(255,43,214,.20),transparent 26%),radial-gradient(circle at 80% 20%,rgba(38,232,255,.12),transparent 28%),linear-gradient(135deg,#03040a,#080713 55%,#07030d)}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);background:radial-gradient(circle at 15% 15%,rgba(255,43,214,.08),transparent 22%),radial-gradient(circle at 82% 34%,rgba(38,232,255,.06),transparent 20%),rgba(0,0,0,.12);z-index:0}
-body.game-mode::before{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(0,0,0,.08)}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.10;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.035),rgba(255,255,255,.035) 1px,transparent 1px,transparent 4px);mix-blend-mode:overlay;z-index:0}
-button{font:inherit}
-.preloader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 50% 45%,rgba(255,43,214,.18),transparent 30%),radial-gradient(circle at 30% 20%,rgba(38,232,255,.16),transparent 30%),rgba(2,3,10,.88);backdrop-filter:blur(12px)}
-.preloader.hidden{animation:preloaderOut .45s ease forwards}
-.preloader-card{width:min(620px,94vw);padding:34px;border-radius:30px;text-align:center;border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.025));box-shadow:0 0 90px rgba(255,43,214,.22),0 30px 120px rgba(0,0,0,.75)}
-.loader-orb{width:82px;height:82px;margin:0 auto 18px;border-radius:50%;background:radial-gradient(circle,#fff,var(--cyan) 22%,var(--pink) 58%,transparent 72%);box-shadow:0 0 30px #fff,0 0 70px var(--pink),0 0 110px var(--cyan);animation:loaderPulse 1.15s infinite alternate}
-.eyebrow{margin:0 0 12px;color:var(--muted);text-transform:uppercase;letter-spacing:3px;font-size:14px;font-weight:800}
-.preloader-card h2{margin:8px 0 14px;font-size:clamp(34px,7vw,62px);text-transform:uppercase;text-shadow:0 0 28px var(--pink),0 0 55px var(--cyan)}
-.preload-bar{height:14px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);margin:18px 0 10px}.preload-bar span{display:block;width:0%;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--cyan),var(--pink));transition:width .25s ease}#preloadPercent{display:block;margin-bottom:16px}
-.intro-page{min-height:100dvh;display:grid;place-items:center;padding:clamp(18px,4vw,48px);position:relative;z-index:2}.intro-screen{width:min(980px,92vw);animation:cardIn .65s ease both}.intro-screen.leaving{animation:cardOut .25s ease both}
-.intro-card{display:grid;grid-template-columns:minmax(250px,34%) 1fr;gap:clamp(22px,3vw,34px);align-items:center;min-height:390px;padding:clamp(18px,2.2vw,30px);border:1px solid var(--border);border-radius:30px;background:radial-gradient(circle at 8% 18%,rgba(38,232,255,.16),transparent 28%),radial-gradient(circle at 88% 84%,rgba(255,43,214,.22),transparent 36%),linear-gradient(135deg,rgba(9,12,26,.88),rgba(22,8,32,.84));box-shadow:0 30px 120px rgba(0,0,0,.65),0 0 70px rgba(255,43,214,.16);backdrop-filter:blur(10px)}
-.nova-card{background:radial-gradient(circle at 9% 22%,rgba(38,232,255,.20),transparent 30%),radial-gradient(circle at 92% 80%,rgba(139,92,255,.20),transparent 36%),linear-gradient(135deg,rgba(5,8,18,.88),rgba(13,8,28,.84))}
-.visual-side{min-height:300px;display:grid;place-items:center;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,rgba(38,232,255,.10),rgba(255,43,214,.08));box-shadow:inset 0 0 50px rgba(38,232,255,.10)}
-.character-frame{background:radial-gradient(circle at 50% 35%,rgba(38,232,255,.16),transparent 45%),linear-gradient(135deg,rgba(255,255,255,.05),rgba(139,92,255,.08))}
-.main-img{width:100%;max-height:315px;object-fit:contain;filter:drop-shadow(0 0 28px rgba(38,232,255,.25))}.ship-img{animation:floatShip 4s ease-in-out infinite}.ia-img{max-height:330px;animation:none}
-.intro-card h1{margin:0 0 22px;font-size:clamp(40px,4.7vw,66px);line-height:.92;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 28px rgba(255,43,214,.45),0 0 60px rgba(38,232,255,.18)}
-.intro-card p{margin:0 0 18px;color:#d5cfe5;font-size:clamp(15px,1.4vw,18px);line-height:1.55}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}.actions button,#enterBtn{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:13px 18px;color:var(--text);font:800 15px/1 Inter,Arial,sans-serif;cursor:pointer;background:linear-gradient(135deg,rgba(38,232,255,.24),rgba(255,43,214,.30));box-shadow:0 0 24px rgba(255,43,214,.16);transition:.2s ease}.actions button:hover,#enterBtn:hover{transform:translateY(-2px);border-color:rgba(38,232,255,.65)}.secondary{background:rgba(255,255,255,.05)!important}
-.game-shell{position:relative;z-index:2;height:100dvh;padding:14px;max-width:1660px;margin:0 auto;overflow:hidden}.game-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin-bottom:10px;height:76px}.project-label{color:var(--cyan);text-transform:uppercase;letter-spacing:3px;font-size:12px}.game-header h1{margin:0;font-size:clamp(38px,4.5vw,62px);letter-spacing:12px;text-align:center;text-shadow:0 0 28px rgba(255,43,214,.55)}.system-pill{justify-self:end;padding:10px 16px;border:1px solid var(--border);border-radius:999px;background:rgba(0,0,0,.35);color:var(--muted)}
-.game-grid{height:calc(100dvh - 100px);display:grid;grid-template-columns:minmax(220px,260px) minmax(430px,1fr) minmax(310px,365px);gap:14px}.left-column,.right-column{display:flex;flex-direction:column;gap:12px;min-height:0}.panel{border:1px solid var(--border);border-radius:20px;background:linear-gradient(135deg,rgba(14,18,33,.86),rgba(11,12,24,.78));box-shadow:0 20px 70px rgba(0,0,0,.35),inset 0 0 50px rgba(255,255,255,.025);backdrop-filter:blur(12px)}.connected-panel,.energy-panel,.stats-panel,.tech-panel,.transmission-panel{padding:14px}.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:19px;font-weight:800}.green-dot{width:14px;height:14px;border-radius:50%;background:#55ff20;box-shadow:0 0 16px #55ff20}.connected-row{display:flex;align-items:center;gap:12px}.connected-row img{width:48px;height:48px;border-radius:12px;object-fit:cover;object-position:top;background:#05050b}.connected-row span{display:block;color:var(--muted);margin-bottom:4px}.connected-row strong{font-size:19px}
-.energy-panel{background:radial-gradient(circle at 15% 30%,rgba(255,43,214,.26),transparent 34%),linear-gradient(135deg,rgba(28,17,42,.88),rgba(9,26,34,.72))}.energy-label{color:var(--muted);font-size:15px;margin-bottom:8px}.energy-main{display:flex;align-items:flex-end;gap:8px}.energy-main span{font-size:clamp(40px,4vw,64px);line-height:.86;font-weight:900;color:white;text-shadow:0 0 18px rgba(255,43,214,.95),0 0 42px rgba(38,232,255,.25)}.energy-main small{font-size:23px;font-weight:900;color:white;margin-bottom:3px}
-.stats-panel{flex:1}.stat-row,.meter-head{display:flex;justify-content:space-between;gap:10px}.stat-row{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.10);color:var(--muted);font-size:14px}.stat-row strong{color:var(--text)}.danger-row strong{color:var(--red)}.meter-group{margin-top:14px}.meter{height:12px;border:1px solid rgba(255,255,255,.20);background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin:7px 0 5px}.meter span{display:block;width:0%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink),var(--red));transition:width .25s ease}.meter.decode span{background:linear-gradient(90deg,var(--purple),var(--cyan))}.meter-group small{color:var(--muted);font-size:12px}
-.tech-panel h3,.transmission-panel h3{margin:0 0 12px;font-size:20px}
-.reactor-panel{position:relative;overflow:hidden;min-height:0;display:grid;place-items:center}.level-badge{position:absolute;top:16px;left:16px;z-index:4;padding:10px 15px;border-radius:999px;border:1px solid var(--border);background:rgba(0,0,0,.55);color:var(--cyan);text-transform:uppercase;letter-spacing:1px;font-weight:800}.center-objective{position:absolute;top:16px;right:16px;z-index:4;padding:12px 15px;min-width:190px;border-radius:18px;border:1px solid rgba(38,232,255,.28);background:rgba(0,0,0,.50);box-shadow:0 0 34px rgba(38,232,255,.10)}.center-objective span{color:var(--muted);text-transform:uppercase;letter-spacing:2px;font-size:11px}.center-objective strong{display:block;margin:4px 0;font-size:22px;color:white}.center-objective small{color:var(--cyan);font-weight:700}
-.reactor-click{width:100%;height:100%;border:0;padding:0;background:none;cursor:pointer;position:relative;overflow:hidden}.reactor-click::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at center,rgba(38,232,255,.10),transparent 42%);opacity:.8}.reactor-click img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.08) brightness(.88);transition:.22s ease}.reactor-click:hover img{transform:scale(1.025);filter:contrast(1.15) brightness(1.03)}.reactor-click.clicked img{transform:scale(1.045);filter:contrast(1.28) brightness(1.18)}
-.reactor-panel.critical-pulse{border-color:rgba(255,58,99,.90);box-shadow:0 0 0 2px rgba(255,58,99,.32),0 0 45px rgba(255,58,99,.38),inset 0 0 50px rgba(255,58,99,.18);animation:dryShake .18s linear infinite}.reactor-panel.critical-pulse .reactor-click img{filter:contrast(1.18) brightness(.98) saturate(1.1)}
-.point-layer{position:absolute;inset:0;z-index:7;pointer-events:none}.light-point{position:absolute;width:clamp(115px,10vw,175px);height:clamp(115px,10vw,175px);border:0;padding:0;background:transparent;cursor:pointer;pointer-events:auto;animation:pointPulse .42s alternate infinite;z-index:20}.light-point img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 22px white) drop-shadow(0 0 44px var(--cyan)) drop-shadow(0 0 70px var(--pink))}.light-point::before{content:"";position:absolute;inset:32%;border-radius:50%;border:1px solid rgba(255,255,255,.18);box-shadow:0 0 12px rgba(255,255,255,.14),0 0 20px rgba(38,232,255,.10);animation:ring .9s infinite}
-.click-pop{position:absolute;left:50%;top:50%;z-index:8;transform:translate(-50%,-50%) scale(.8);opacity:0;color:white;font-size:48px;font-weight:900;text-shadow:0 0 18px var(--cyan),0 0 40px var(--pink);pointer-events:none}.click-pop.active{animation:popEnergy .55s ease forwards}
-.tech-panel{overflow:visible}.tech-icons{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;justify-items:center;padding:8px 0 2px}.tech-btn{width:54px;height:54px;border-radius:16px;border:1px solid rgba(255,255,255,.20);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.18),transparent 35%),rgba(255,255,255,.045);cursor:pointer;box-shadow:inset 0 0 20px rgba(38,232,255,.07);position:relative;transition:.2s ease}.tech-btn img{width:100%;height:100%;object-fit:contain;border-radius:14px}.tech-btn.unlocked.affordable{border-color:rgba(104,255,138,.65);box-shadow:0 0 22px rgba(104,255,138,.14),inset 0 0 20px rgba(104,255,138,.08)}.tech-btn.locked,.tech-btn.unaffordable{filter:grayscale(1);opacity:.34;cursor:not-allowed}.tech-btn.unlocked.unaffordable{opacity:.55}.tech-btn.unlocked.affordable:hover{transform:translateY(-3px);border-color:rgba(38,232,255,.75);box-shadow:0 0 28px rgba(38,232,255,.20)}.tech-btn::after{content:attr(data-tooltip);white-space:pre-line;position:absolute;right:0;bottom:calc(100% + 12px);width:250px;padding:13px;border-radius:14px;border:1px solid rgba(38,232,255,.42);background:rgba(5,8,18,.98);color:#f7f4ff;font-size:12px;line-height:1.45;text-align:left;opacity:0;visibility:hidden;pointer-events:none;z-index:60;box-shadow:0 18px 50px rgba(0,0,0,.55),0 0 24px rgba(38,232,255,.12)}.tech-btn:hover::after{opacity:1;visibility:visible}
-.transmission-panel{flex:1;display:flex;flex-direction:column;min-height:0}.trans-head{display:flex;justify-content:space-between;align-items:center;gap:12px}#soundToggle{border:1px solid rgba(255,255,255,.20);border-radius:999px;color:var(--text);background:rgba(255,255,255,.06);padding:8px 12px;cursor:pointer}.transmission-list{flex:1;min-height:180px;display:flex;flex-direction:column;gap:10px;overflow:auto;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:12px;background:radial-gradient(circle at 50% 20%,rgba(38,232,255,.06),transparent 38%),rgba(0,0,0,.22)}.transmission-card{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:10px;border:1px solid rgba(38,232,255,.22);border-radius:14px;background:rgba(0,0,0,.24)}.transmission-card img{width:42px;height:42px;border-radius:10px;object-fit:cover;object-position:top}.transmission-card strong{display:block;color:var(--cyan);font-size:13px;margin-bottom:3px}.transmission-card p{margin:0;color:#ddd8ee;line-height:1.35;font-size:13px}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.controls button{border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:16px 12px;color:white;font-weight:900;background:linear-gradient(135deg,rgba(38,232,255,.18),rgba(255,43,214,.28));cursor:pointer}.controls .danger{background:linear-gradient(135deg,rgba(255,34,90,.25),rgba(255,139,43,.18))}
-@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}@keyframes cardOut{to{opacity:0;transform:translateY(-10px) scale(.985)}}@keyframes floatShip{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes loaderPulse{from{transform:scale(.92);filter:brightness(.9)}to{transform:scale(1.08);filter:brightness(1.45)}}@keyframes preloaderOut{to{opacity:0;visibility:hidden}}@keyframes popEnergy{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-160%) scale(1.12)}}@keyframes dryShake{0%,100%{transform:translate(0,0)}25%{transform:translate(2px,-1px)}50%{transform:translate(-2px,1px)}75%{transform:translate(1px,2px)}}@keyframes pointPulse{from{transform:scale(.92)}to{transform:scale(1.12)}}@keyframes ring{from{opacity:.9;transform:scale(.85)}to{opacity:0;transform:scale(1.45)}}
-@media(max-width:1150px){
-  body{overflow:auto}
-  .game-shell{height:auto;min-height:100dvh;overflow:visible}
-  .game-header{height:auto;grid-template-columns:1fr;text-align:center}
-  .system-pill{justify-self:center}
-  .game-grid{height:auto;grid-template-columns:1fr;gap:12px}
-  .left-column{display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
-  .stats-panel{grid-column:1 / -1}
-  .right-column{display:grid;grid-template-columns:1fr 1fr}
-  .transmission-panel{grid-column:1 / -1;min-height:230px}
-  .reactor-panel{min-height:58vh}
-}
-@media(max-width:760px){
-  body.screen-1{background:linear-gradient(rgba(2,2,8,.25),rgba(2,2,8,.36)),url("nv_asset/illustrations_tel/1Univers.PNG") center/cover no-repeat fixed,#020208}
-  body.screen-2{background:linear-gradient(rgba(0,0,8,.18),rgba(0,0,12,.34)),url("nv_asset/illustrations_tel/2Univers_planete.PNG") center/cover no-repeat fixed,#020208}
-  body.screen-3{background:linear-gradient(rgba(0,0,8,.18),rgba(0,0,12,.34)),url("nv_asset/illustrations_tel/3planete.PNG") center/cover no-repeat fixed,#020208}
-  body.screen-4{background:linear-gradient(rgba(0,0,8,.18),rgba(0,0,12,.34)),url("nv_asset/illustrations_tel/4porte.PNG") center/cover no-repeat fixed,#020208}
-  .intro-page{padding:18px}.intro-card{grid-template-columns:1fr;min-height:unset;padding:18px;border-radius:24px}.visual-side{min-height:210px}.main-img{max-height:230px}.ia-img{max-height:250px}.intro-card h1{font-size:38px}.intro-card p{font-size:14px;line-height:1.42}.actions{display:grid;grid-template-columns:1fr 1fr}
-  .game-shell{padding:8px}.game-header h1{font-size:32px;letter-spacing:5px}.project-label{font-size:10px}.left-column,.right-column{grid-template-columns:1fr}.reactor-panel{min-height:420px}.energy-main span{font-size:54px}.tech-icons{grid-template-columns:repeat(5,1fr);gap:8px}.tech-btn{width:46px;height:46px}.tech-btn::after{display:none}.center-objective{right:10px;top:62px;min-width:145px;padding:9px 11px}.center-objective strong{font-size:17px}.transmission-list{min-height:190px}
-}
+/* =========================================================
+   CYBERCORE OMEGA — STYLE.CSS
+   Version lisible et commentée
+   ---------------------------------------------------------
+   Objectif :
+   - garder l’univers visuel CyberCore
+   - garder le responsive ordinateur / téléphone
+   - afficher le point lumineux UNIQUEMENT avec l'image PNG
+   - supprimer les formes artificielles autour du point lumineux
+   ========================================================= */
 
 
+/* =========================================================
+   1. VARIABLES GLOBALES
+   ========================================================= */
 
-/* Popup défaite — version futuriste */
-.game-over-modal{
-  position:fixed;
-  inset:0;
-  z-index:9998;
-  display:grid;
-  place-items:center;
-  padding:22px;
-  background:
-    linear-gradient(rgba(0,0,0,.62),rgba(0,0,0,.78)),
-    url("nv_asset/illustrations_ordi/game_over.png") center/cover no-repeat;
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  overflow:hidden;
-}
-.game-over-modal::before{
-  content:"";
-  position:absolute;
-  inset:-20%;
-  background:
-    radial-gradient(circle at 50% 45%,rgba(255,40,80,.18),transparent 28%),
-    radial-gradient(circle at 20% 15%,rgba(255,43,214,.13),transparent 26%),
-    radial-gradient(circle at 80% 75%,rgba(38,232,255,.10),transparent 26%);
-  animation:dangerFog 4s ease-in-out infinite alternate;
-  pointer-events:none;
-}
-.game-over-modal::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    repeating-linear-gradient(to bottom,rgba(255,255,255,.06),rgba(255,255,255,.06) 1px,transparent 1px,transparent 5px),
-    linear-gradient(90deg,transparent,rgba(255,58,99,.12),transparent);
-  mix-blend-mode:screen;
-  opacity:.26;
-}
-.game-over-card{
-  position:relative;
-  z-index:2;
-  width:min(720px,94vw);
-  border:1px solid rgba(255,70,110,.58);
-  border-radius:30px;
-  padding:32px;
-  background:
-    linear-gradient(135deg,rgba(8,10,22,.86),rgba(20,5,16,.82)),
-    radial-gradient(circle at 15% 12%,rgba(255,43,214,.18),transparent 34%),
-    radial-gradient(circle at 90% 80%,rgba(38,232,255,.11),transparent 34%);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.08) inset,
-    0 0 45px rgba(255,58,99,.42),
-    0 0 110px rgba(255,43,214,.20),
-    0 35px 130px rgba(0,0,0,.92);
-  animation:gameOverIn .55s cubic-bezier(.16,1,.3,1) both, redBorderPulse 1.8s ease-in-out infinite alternate;
-}
-.game-over-card .eyebrow{
-  color:#ff6b91;
-  text-shadow:0 0 18px rgba(255,58,99,.85);
-}
-.game-over-card h2{
-  margin:0 0 10px;
-  font-size:clamp(44px,7vw,86px);
-  line-height:.9;
-  text-align:center;
-  text-transform:uppercase;
-  letter-spacing:5px;
-  color:#fff;
-  text-shadow:
-    0 0 12px #fff,
-    0 0 28px rgba(255,58,99,.95),
-    0 0 70px rgba(255,43,214,.65);
-  animation:glitchPulse .9s infinite alternate;
-}
-.game-over-card h2 span{
-  color:#ff345d;
-  text-shadow:0 0 20px rgba(255,58,99,1);
-}
-.game-over-reason{
-  color:#f1dce6;
-  margin:12px 0 22px;
-  text-align:center;
-  font-weight:700;
-}
-.game-over-stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin:22px 0;
-}
-.game-over-stats div{
-  padding:15px;
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,.12);
-  background:linear-gradient(135deg,rgba(0,0,0,.34),rgba(255,58,99,.08));
-  box-shadow:inset 0 0 26px rgba(255,255,255,.025);
-}
-.game-over-stats span{
-  display:block;
-  color:#ff9ab2;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:1.4px;
-  margin-bottom:7px;
-}
-.game-over-stats strong{
-  color:white;
-  font-size:18px;
-  text-shadow:0 0 14px rgba(255,255,255,.20);
-}
-#restartGameBtn{
-  width:100%;
-  border:1px solid rgba(255,255,255,.24);
-  border-radius:18px;
-  padding:17px 20px;
-  color:white;
-  font-weight:950;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  cursor:pointer;
-  background:
-    linear-gradient(135deg,rgba(38,232,255,.24),rgba(255,43,214,.38),rgba(255,58,99,.32));
-  box-shadow:
-    0 0 28px rgba(255,43,214,.28),
-    inset 0 0 20px rgba(255,255,255,.08);
-}
-#restartGameBtn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 38px rgba(255,43,214,.45);
-}
-@keyframes gameOverIn{
-  from{opacity:0;transform:scale(.88) translateY(22px);filter:blur(8px)}
-  to{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}
-}
-@keyframes redBorderPulse{
-  from{border-color:rgba(255,70,110,.48);box-shadow:0 0 40px rgba(255,58,99,.30),0 35px 130px rgba(0,0,0,.92)}
-  to{border-color:rgba(255,150,175,.95);box-shadow:0 0 75px rgba(255,58,99,.58),0 0 130px rgba(255,43,214,.26),0 35px 130px rgba(0,0,0,.92)}
-}
-@keyframes glitchPulse{
-  0%{transform:translateX(0);filter:brightness(1)}
-  38%{transform:translateX(-1px);filter:brightness(1.15)}
-  41%{transform:translateX(2px);filter:brightness(1.35)}
-  44%{transform:translateX(0);filter:brightness(1)}
-  100%{transform:translateX(0);filter:brightness(1.12)}
-}
-@keyframes dangerFog{
-  from{transform:translate3d(-2%,0,0) scale(1)}
-  to{transform:translate3d(2%,1%,0) scale(1.06)}
-}
-@media(max-width:760px){
-  .game-over-modal{
-    background:
-      linear-gradient(rgba(0,0,0,.62),rgba(0,0,0,.78)),
-      url("nv_asset/illustrations_tel/game_over.png") center/cover no-repeat;
-  }
-  .game-over-card{padding:22px}
-  .game-over-stats{grid-template-columns:1fr}
-}
-/* Responsive jeu : moins de scroll */
-@media(max-width:1150px){
-  .game-grid{
-    grid-template-columns: minmax(210px, .75fr) minmax(420px, 1.25fr);
-  }
-  .right-column{
-    grid-column:1 / -1;
-    display:grid;
-    grid-template-columns: 330px 1fr;
-  }
-  .transmission-panel{min-height:220px}
-}
-@media(max-width:780px){
-  .game-over-stats{grid-template-columns:1fr}
+:root {
+  --bg: #05050b;
+  --panel: rgba(10, 12, 24, 0.78);
+  --text: #f7f4ff;
+  --muted: #b7b0ca;
+
+  --cyan: #26e8ff;
+  --pink: #ff2bd6;
+  --purple: #8b5cff;
+  --red: #ff3a63;
+  --green: #68ff8a;
+
+  --border: rgba(255, 255, 255, 0.14);
 }
 
-.game-over-active .reactor-panel{
-  animation:dryShake .12s linear 10;
-  border-color:rgba(255,58,99,.95);
+* {
+  box-sizing: border-box;
 }
 
-.tech-btn.locked,
-.tech-btn.unaffordable{
-  filter: grayscale(1) brightness(.65);
-  opacity:.38;
-}
-.tech-btn.unlocked{
-  filter:none;
-  opacity:1;
-}
-.tech-btn.unlocked.affordable{
-  border-color:rgba(95,255,135,.95)!important;
-  box-shadow:0 0 0 2px rgba(95,255,135,.22),0 0 26px rgba(95,255,135,.45),inset 0 0 18px rgba(95,255,135,.10)!important;
+[hidden] {
+  display: none !important;
 }
 
-
-/* Technologies : état verrouillé plus lumineux, moins gris */
-.tech-btn.locked,
-.tech-btn.unaffordable{
-  opacity:.72 !important;
-  filter:grayscale(.55) brightness(.95) !important;
-  background:
-    radial-gradient(circle at 50% 42%,rgba(255,255,255,.18),transparent 38%),
-    linear-gradient(135deg,rgba(38,232,255,.10),rgba(255,255,255,.045)) !important;
-  border-color:rgba(255,255,255,.20) !important;
-  box-shadow:
-    inset 0 0 22px rgba(255,255,255,.055),
-    0 0 14px rgba(38,232,255,.06) !important;
+html,
+body {
+  margin: 0;
+  min-height: 100%;
 }
 
-.tech-btn.locked img,
-.tech-btn.unaffordable img{
-  opacity:.55;
+body {
+  min-height: 100dvh;
+  font-family: Inter, Arial, sans-serif;
+  color: var(--text);
+  overflow: hidden;
+  background: #020208;
 }
 
-.tech-btn.unlocked.unaffordable{
-  opacity:.86 !important;
-  filter:grayscale(.28) brightness(1.05) !important;
-  border-color:rgba(38,232,255,.30) !important;
-  box-shadow:
-    inset 0 0 20px rgba(38,232,255,.10),
-    0 0 18px rgba(38,232,255,.10) !important;
-}
-
-/* Quand l'énergie est suffisante : carré vert très visible */
-.tech-btn.unlocked.affordable{
-  opacity:1 !important;
-  filter:none !important;
-  border-color:rgba(95,255,135,1) !important;
-  background:
-    radial-gradient(circle at 50% 38%,rgba(95,255,135,.25),transparent 42%),
-    linear-gradient(135deg,rgba(95,255,135,.16),rgba(38,232,255,.10)) !important;
-  box-shadow:
-    0 0 0 2px rgba(95,255,135,.32),
-    0 0 32px rgba(95,255,135,.55),
-    inset 0 0 22px rgba(95,255,135,.16) !important;
-}
-
-
-/* ÉTATS TECHNOLOGIES — VERSION CORRIGÉE
-   1) locked : verrouillé par niveau = grisé
-   2) unlocked unaffordable : niveau débloqué mais pas assez d'énergie = lumineux
-   3) unlocked affordable : activable = contour vert
-*/
-
-.tech-btn.locked{
-  opacity:.32 !important;
-  filter:grayscale(1) brightness(.55) !important;
-  border-color:rgba(255,255,255,.10) !important;
-  background:
-    linear-gradient(135deg,rgba(255,255,255,.035),rgba(255,255,255,.018)) !important;
-  box-shadow:
-    inset 0 0 12px rgba(255,255,255,.025) !important;
-  cursor:not-allowed !important;
-}
-
-.tech-btn.locked img{
-  opacity:.38 !important;
-}
-
-/* Déverrouillé par le niveau mais énergie insuffisante */
-.tech-btn.unlocked.unaffordable{
-  opacity:1 !important;
-  filter:none !important;
-  border-color:rgba(38,232,255,.55) !important;
-  background:
-    radial-gradient(circle at 50% 38%,rgba(38,232,255,.24),transparent 42%),
-    radial-gradient(circle at 80% 80%,rgba(255,43,214,.15),transparent 38%),
-    linear-gradient(135deg,rgba(38,232,255,.13),rgba(255,255,255,.045)) !important;
-  box-shadow:
-    0 0 18px rgba(38,232,255,.28),
-    inset 0 0 24px rgba(38,232,255,.12) !important;
-  cursor:not-allowed !important;
-}
-
-.tech-btn.unlocked.unaffordable img{
-  opacity:1 !important;
-  filter:drop-shadow(0 0 10px rgba(38,232,255,.35)) !important;
-}
-
-/* Déverrouillé + assez d'énergie = activable */
-.tech-btn.unlocked.affordable{
-  opacity:1 !important;
-  filter:none !important;
-  border-color:rgba(95,255,135,1) !important;
-  background:
-    radial-gradient(circle at 50% 38%,rgba(95,255,135,.32),transparent 42%),
-    radial-gradient(circle at 82% 82%,rgba(38,232,255,.16),transparent 38%),
-    linear-gradient(135deg,rgba(95,255,135,.18),rgba(38,232,255,.10)) !important;
-  box-shadow:
-    0 0 0 2px rgba(95,255,135,.36),
-    0 0 34px rgba(95,255,135,.62),
-    inset 0 0 24px rgba(95,255,135,.18) !important;
-  cursor:pointer !important;
-}
-
-.tech-btn.unlocked.affordable img{
-  opacity:1 !important;
-  filter:drop-shadow(0 0 12px rgba(95,255,135,.45)) !important;
-}
-
-
-/* Anti glisser-déposer des points lumineux */
-.light-point,
-.light-point img{
-  user-select:none;
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  -webkit-user-drag:none;
-}
-
-.light-point{
-  touch-action:manipulation;
-}
-
-
-/* Nouveau rectangle central : image transférée par le vaisseau */
-.ship-transfer-panel{
-  padding:14px;
-  min-height:210px;
-}
-
-.ship-transfer-panel h3{
-  margin:0 0 12px;
-  font-size:18px;
-  color:white;
-}
-
-.ship-transfer-box{
-  height:170px;
-  border:1px solid rgba(38,232,255,.32);
-  border-radius:18px;
-  display:grid;
-  place-items:center;
-  text-align:center;
-  padding:14px;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 40%,rgba(38,232,255,.13),transparent 34%),
-    radial-gradient(circle at 82% 78%,rgba(255,43,214,.12),transparent 35%),
-    rgba(0,0,0,.24);
-  box-shadow:
-    inset 0 0 34px rgba(38,232,255,.06),
-    0 0 24px rgba(38,232,255,.08);
-}
-
-.ship-transfer-box span{
-  color:rgba(247,244,255,.58);
-  font-size:13px;
-  letter-spacing:1.3px;
-  text-transform:uppercase;
-}
-
-.ship-transfer-box img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:14px;
-  display:block;
-}
-
-/* Transmission réduite */
-.transmission-panel{
-  flex:.72 !important;
-}
-
-.transmission-list{
-  min-height:135px !important;
-  max-height:190px;
-}
-
-@media(max-width:1150px){
-  .ship-transfer-panel{
-    min-height:220px;
-  }
-
-  .ship-transfer-box{
-    height:175px;
-  }
-
-  .transmission-panel{
-    min-height:190px !important;
-  }
-}
-
-@media(max-width:760px){
-  .ship-transfer-panel{
-    min-height:190px;
-  }
-
-  .ship-transfer-box{
-    height:150px;
-  }
-
-  .transmission-list{
-    min-height:130px !important;
-    max-height:170px;
-  }
-}
-
-
-/* Zone image transférée par le vaisseau */
-.ship-transfer-panel{padding:12px;min-height:165px}
-.ship-transfer-panel h3{margin:0 0 10px;font-size:16px}
-.ship-transfer-box{
-  height:120px;border:1px solid rgba(38,232,255,.34);border-radius:16px;
-  display:grid;place-items:center;text-align:center;padding:12px;overflow:hidden;
-  background:radial-gradient(circle at 50% 40%,rgba(38,232,255,.14),transparent 34%),
-             radial-gradient(circle at 82% 78%,rgba(255,43,214,.12),transparent 35%),
-             rgba(0,0,0,.24);
-  box-shadow:inset 0 0 34px rgba(38,232,255,.06),0 0 22px rgba(38,232,255,.08);
-}
-.ship-transfer-box span{color:rgba(247,244,255,.58);font-size:12px;letter-spacing:1.2px;text-transform:uppercase}
-.ship-transfer-box img{width:100%;height:100%;object-fit:cover;border-radius:12px}
-
-/* Transmission réduite */
-.transmission-panel{flex:.55!important}
-.transmission-list{min-height:90px!important;max-height:135px!important}
-
-/* Niveau 8 : masquer objectif et décodage */
-.game-shell.level-eight .center-objective{display:none!important}
-.game-shell.level-eight .stats-panel .meter-group:last-child{display:none!important}
-
-/* Choix fin niveau 7 + réussite */
-.level-choice-modal,.success-modal{
-  position:fixed;inset:0;z-index:9997;display:grid;place-items:center;padding:22px;
-  background:rgba(0,0,0,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-}
-.level-choice-card,.success-card{
-  width:min(680px,94vw);border:1px solid rgba(38,232,255,.38);border-radius:30px;padding:30px;
-  background:radial-gradient(circle at 12% 15%,rgba(38,232,255,.18),transparent 32%),
-             radial-gradient(circle at 84% 82%,rgba(255,43,214,.20),transparent 34%),
-             linear-gradient(135deg,rgba(8,10,24,.92),rgba(20,7,32,.90));
-  box-shadow:0 0 80px rgba(38,232,255,.16),0 35px 120px rgba(0,0,0,.86);
-}
-.level-choice-card h2,.success-card h2{
-  margin:0 0 14px;text-transform:uppercase;font-size:clamp(36px,6vw,68px);
-  line-height:.92;letter-spacing:3px;text-shadow:0 0 26px rgba(38,232,255,.45),0 0 48px rgba(255,43,214,.35);
-}
-.level-choice-card p,.success-card p{color:#ded8ef;font-size:17px}
-.choice-actions{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
-.choice-actions button,#successRestartBtn{
-  border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:17px 18px;color:white;
-  cursor:pointer;font-weight:950;letter-spacing:1px;text-transform:uppercase;
-  background:linear-gradient(135deg,rgba(38,232,255,.23),rgba(255,43,214,.33));
-  box-shadow:0 0 28px rgba(255,43,214,.20),inset 0 0 20px rgba(255,255,255,.06);
-}
-#missionCompleteBtn{background:linear-gradient(135deg,rgba(95,255,135,.28),rgba(38,232,255,.22))}
-#continueProductionBtn{background:linear-gradient(135deg,rgba(255,43,214,.28),rgba(255,88,36,.20))}
-.success-modal{
-  background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.72)),
-             url("nv_asset/illustrations_ordi/reusite.png") center/cover no-repeat;
-}
-.success-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}
-.success-stats div{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;background:rgba(0,0,0,.25)}
-.success-stats span{display:block;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-size:11px;margin-bottom:6px}
-.success-stats strong{color:white}
-
-/* Technologies : déverrouillé lumineux / activable vert */
-.tech-btn.locked{
-  opacity:.32!important;filter:grayscale(1) brightness(.55)!important;border-color:rgba(255,255,255,.10)!important;
-  background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(255,255,255,.018))!important;
-  box-shadow:inset 0 0 12px rgba(255,255,255,.025)!important;cursor:not-allowed!important;
-}
-.tech-btn.locked img{opacity:.38!important}
-.tech-btn.unlocked.unaffordable{
-  opacity:1!important;filter:none!important;border-color:rgba(38,232,255,.55)!important;
-  background:radial-gradient(circle at 50% 38%,rgba(38,232,255,.24),transparent 42%),
-             radial-gradient(circle at 80% 80%,rgba(255,43,214,.15),transparent 38%),
-             linear-gradient(135deg,rgba(38,232,255,.13),rgba(255,255,255,.045))!important;
-  box-shadow:0 0 18px rgba(38,232,255,.28),inset 0 0 24px rgba(38,232,255,.12)!important;
-  cursor:not-allowed!important;
-}
-.tech-btn.unlocked.affordable{
-  opacity:1!important;filter:none!important;border-color:rgba(95,255,135,1)!important;
-  background:radial-gradient(circle at 50% 38%,rgba(95,255,135,.32),transparent 42%),
-             radial-gradient(circle at 82% 82%,rgba(38,232,255,.16),transparent 38%),
-             linear-gradient(135deg,rgba(95,255,135,.18),rgba(38,232,255,.10))!important;
-  box-shadow:0 0 0 2px rgba(95,255,135,.36),0 0 34px rgba(95,255,135,.62),inset 0 0 24px rgba(95,255,135,.18)!important;
-  cursor:pointer!important;
-}
-
-/* Anti-drag points lumineux */
-.light-point,.light-point img{
-  user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-webkit-user-drag:none;
-}
-.light-point{touch-action:manipulation}
-
-@media(max-width:760px){
-  .success-modal{
-    background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.72)),
-               url("nv_asset/illustrations_tel/reusite.png") center/cover no-repeat;
-  }
-  .choice-actions,.success-stats{grid-template-columns:1fr}
-  .ship-transfer-box{height:112px}
-  .transmission-list{max-height:125px!important}
+button {
+  font: inherit;
 }
 
 
 /* =========================================================
-   PATCH MOBILE STABLE — garde la mise en page, rend le jeu jouable
+   2. FONDS DES VISUELS D'INTRODUCTION
    ========================================================= */
 
-.mobile-panel-toggle{display:none!important}
-
-html,body,button,.reactor-click,.light-point,.tech-btn{
-  touch-action:manipulation;
-  -webkit-tap-highlight-color:transparent;
+body.screen-1 {
+  background:
+    linear-gradient(rgba(2, 2, 8, 0.25), rgba(2, 2, 8, 0.34)),
+    url("nv_asset/illustrations_ordi/1Univers.PNG") center / cover no-repeat fixed,
+    #020208;
 }
 
-.game-shell,.game-shell *{
-  -webkit-touch-callout:none;
-  user-select:none;
-  -webkit-user-select:none;
+body.screen-2 {
+  background:
+    linear-gradient(rgba(0, 0, 8, 0.18), rgba(0, 0, 12, 0.30)),
+    url("nv_asset/illustrations_ordi/2Univer_planete.PNG") center / cover no-repeat fixed,
+    #020208;
 }
 
-/* Bouton infos technologies */
-.tech-panel-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:12px;
-}
-.tech-panel-head h3{margin:0!important}
-#techManualBtn{
-  border:1px solid rgba(38,232,255,.36);
-  border-radius:999px;
-  padding:7px 10px;
-  color:white;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:900;
-  background:linear-gradient(135deg,rgba(38,232,255,.18),rgba(255,43,214,.18));
-  box-shadow:0 0 18px rgba(38,232,255,.10);
+body.screen-3 {
+  background:
+    linear-gradient(rgba(0, 0, 8, 0.16), rgba(0, 0, 12, 0.28)),
+    url("nv_asset/illustrations_ordi/3planete.PNG") center / cover no-repeat fixed,
+    #020208;
 }
 
-/* Popups technologies */
-.tech-info-modal,.tech-manual-modal{
-  position:fixed;
-  inset:0;
-  z-index:10000;
-  display:grid;
-  place-items:center;
-  padding:22px;
-  background:radial-gradient(circle at 50% 38%,rgba(38,232,255,.14),transparent 34%),
-             radial-gradient(circle at 85% 80%,rgba(255,43,214,.14),transparent 34%),
-             rgba(0,0,0,.76);
-  backdrop-filter:blur(13px);
-  -webkit-backdrop-filter:blur(13px);
-}
-.tech-info-card,.tech-manual-card{
-  width:min(850px,96vw);
-  max-height:88dvh;
-  overflow:auto;
-  border:1px solid rgba(38,232,255,.38);
-  border-radius:30px;
-  padding:24px;
-  background:radial-gradient(circle at 12% 10%,rgba(38,232,255,.18),transparent 30%),
-             radial-gradient(circle at 90% 88%,rgba(255,43,214,.16),transparent 32%),
-             linear-gradient(135deg,rgba(6,9,22,.96),rgba(18,8,32,.95));
-  box-shadow:0 0 90px rgba(38,232,255,.18),0 0 120px rgba(255,43,214,.12),0 35px 130px rgba(0,0,0,.86);
-  animation:techModalIn .38s cubic-bezier(.16,1,.3,1) both;
-}
-.tech-info-top,.tech-manual-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  margin-bottom:16px;
-}
-.tech-info-top{display:grid;grid-template-columns:76px 1fr}
-.tech-info-icon-wrap{
-  width:76px;height:76px;border-radius:22px;display:grid;place-items:center;
-  border:1px solid rgba(95,255,135,.55);
-  background:radial-gradient(circle at 50% 40%,rgba(95,255,135,.22),transparent 42%),rgba(0,0,0,.28);
-  box-shadow:0 0 34px rgba(95,255,135,.32),inset 0 0 22px rgba(95,255,135,.12);
-}
-.tech-info-icon-wrap img{width:58px;height:58px;object-fit:contain}
-.tech-info-card h2,.tech-manual-card h2{
-  margin:0;
-  text-transform:uppercase;
-  font-size:clamp(30px,5vw,56px);
-  line-height:.95;
-  letter-spacing:2px;
-  text-shadow:0 0 28px rgba(38,232,255,.42);
-}
-.tech-info-grid,.success-stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-.tech-info-grid div,.tech-info-section,.tech-unlock-summary,.tech-manual-item{
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:16px;
-  padding:13px;
-  background:rgba(0,0,0,.24);
-}
-.tech-info-grid span,.tech-unlock-summary span{
-  display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;
-}
-.tech-info-section{margin-top:10px}
-.tech-info-section h3{
-  margin:0 0 6px;
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  color:var(--cyan);
-}
-.tech-info-section.warning h3{color:#ff7b9a}
-.tech-info-section p,.tech-manual-content p{margin:0;color:#e8e4f4;line-height:1.4}
-#closeTechInfoBtn,#closeTechManualBtn{
-  border:1px solid rgba(255,255,255,.20);
-  border-radius:16px;
-  padding:13px 16px;
-  color:white;
-  font-weight:950;
-  text-transform:uppercase;
-  cursor:pointer;
-  background:linear-gradient(135deg,rgba(38,232,255,.24),rgba(255,43,214,.32));
-}
-#closeTechInfoBtn{width:100%;margin-top:16px}
-.tech-manual-list{
-  max-height:55dvh;
-  overflow:auto;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:14px;
-}
-.tech-manual-item{
-  display:grid;
-  grid-template-columns:58px 1fr;
-  gap:12px;
-}
-.tech-manual-item.locked{opacity:.50;filter:grayscale(.85)}
-.tech-manual-icon{
-  width:58px;height:58px;border-radius:18px;display:grid;place-items:center;
-  border:1px solid rgba(38,232,255,.32);background:rgba(0,0,0,.25);
-}
-.tech-manual-icon img{width:45px;height:45px;object-fit:contain}
-.tech-manual-content h3{margin:0 0 6px;font-size:17px;text-transform:uppercase}
-.manual-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.manual-meta span{
-  border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:4px 7px;font-size:11px;color:#d9d3e8;background:rgba(0,0,0,.22);
-}
-.current-cost{color:var(--green)!important;border-color:rgba(95,255,135,.38)!important}
-.manual-unlock-bar{height:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
-.manual-unlock-bar i{display:block;width:0%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--green))}
-
-@keyframes techModalIn{
-  from{opacity:0;transform:translateY(18px) scale(.94);filter:blur(6px)}
-  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+body.screen-4 {
+  background:
+    linear-gradient(rgba(0, 0, 8, 0.18), rgba(0, 0, 12, 0.30)),
+    url("nv_asset/illustrations_ordi/4porte.PNG") center / cover no-repeat fixed,
+    #020208;
 }
 
-/* Mobile : on garde la logique de l'interface, mais on la compacte */
-@media(max-width:760px){
-  html,body{overflow:hidden!important}
-  body.game-mode{position:fixed;inset:0;overflow:hidden!important}
-  .game-shell{
-    width:100vw!important;
-    height:100dvh!important;
-    padding:6px!important;
-    overflow:hidden!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:6px!important;
-  }
-  .game-header{
-    height:48px!important;
-    min-height:48px!important;
-    margin:0!important;
-    display:grid!important;
-    grid-template-columns:1fr auto!important;
-    grid-template-areas:"label status" "title status"!important;
-    gap:0 8px!important;
-    text-align:left!important;
-  }
-  .project-label{grid-area:label;font-size:7.5px!important;letter-spacing:1.2px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .game-header h1{grid-area:title;font-size:23px!important;letter-spacing:4px!important;line-height:1!important;text-align:left!important;margin:0!important}
-  .system-pill{grid-area:status;font-size:10px!important;padding:7px 9px!important;max-width:108px!important}
-  .game-grid{
-    flex:1!important;
-    min-height:0!important;
-    height:auto!important;
-    display:grid!important;
-    grid-template-columns:96px 1fr!important;
-    grid-template-rows:1fr 150px!important;
-    gap:6px!important;
-    overflow:hidden!important;
-  }
-  .left-column{
-    grid-column:1!important;
-    grid-row:1!important;
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    grid-template-rows:46px 60px 1fr!important;
-    gap:6px!important;
-    overflow:hidden!important;
-  }
-  .connected-panel{display:flex!important;padding:6px!important;min-height:0!important}
-  .connected-row{gap:5px!important}
-  .connected-row img{width:26px!important;height:26px!important;border-radius:8px!important}
-  .connected-row span{font-size:8px!important}
-  .connected-row strong{font-size:10px!important}
-  .panel-title{display:none!important}
-  .energy-panel{padding:7px!important;min-height:0!important}
-  .energy-label{font-size:10px!important;margin-bottom:2px!important}
-  .energy-main span{font-size:27px!important}
-  .energy-main small{font-size:13px!important}
-  .stats-panel{padding:7px!important;min-height:0!important;overflow:hidden!important}
-  .stats-panel .stat-row{display:flex!important;font-size:9px!important;padding:3px 0!important}
-  .stats-panel .stat-row span,.stats-panel .stat-row strong{font-size:9px!important}
-  .meter-group{margin-top:5px!important}
-  .meter-head{font-size:9px!important}
-  .meter{height:7px!important;margin:3px 0!important}
-  .meter-group small{font-size:8px!important}
-  .reactor-panel{
-    grid-column:2!important;
-    grid-row:1!important;
-    height:100%!important;
-    min-height:0!important;
-    border-radius:16px!important;
-  }
-  .reactor-click{height:100%!important;touch-action:manipulation!important}
-  .reactor-click img{
-    object-fit:contain!important;
-    object-position:center!important;
-    background:radial-gradient(circle at 50% 45%,rgba(38,232,255,.10),transparent 45%),rgba(0,0,0,.32)!important;
-  }
-  .level-badge{top:7px!important;left:7px!important;padding:6px 9px!important;font-size:10px!important}
-  .center-objective{top:7px!important;right:7px!important;min-width:102px!important;padding:7px 8px!important;border-radius:12px!important}
-  .center-objective span{font-size:7px!important}
-  .center-objective strong{font-size:13px!important}
-  .center-objective small{font-size:9px!important}
-  .right-column{
-    grid-column:1 / -1!important;
-    grid-row:2!important;
-    display:grid!important;
-    grid-template-columns:1fr 1.4fr!important;
-    grid-template-rows:1fr!important;
-    gap:6px!important;
-    min-height:0!important;
-    max-height:none!important;
-    overflow:hidden!important;
-  }
-  .tech-panel{padding:7px!important}
-  .tech-panel-head{margin-bottom:6px!important}
-  .tech-panel-head h3{font-size:12px!important}
-  #techManualBtn{font-size:10px!important;padding:5px 7px!important}
-  .tech-icons{grid-template-columns:repeat(3,1fr)!important;gap:5px!important;padding:0!important}
-  .tech-btn{width:41px!important;height:41px!important;border-radius:12px!important;margin:auto!important}
-  .ship-transfer-panel{display:none!important}
-  .transmission-panel{padding:7px!important;min-height:0!important;max-height:none!important}
-  .transmission-panel h3{font-size:12px!important;margin:0!important}
-  #soundToggle{font-size:10px!important;padding:4px 7px!important}
-  .transmission-list{min-height:54px!important;max-height:66px!important;padding:6px!important;gap:5px!important}
-  .transmission-card{grid-template-columns:26px 1fr!important;padding:6px!important;gap:6px!important}
-  .transmission-card img{width:26px!important;height:26px!important}
-  .transmission-card strong{font-size:10px!important}
-  .transmission-card p{font-size:10px!important;line-height:1.2!important}
-  .controls{grid-column:1 / -1;grid-template-columns:1fr 1fr!important;gap:6px!important}
-  .controls button{padding:9px 7px!important;font-size:12px!important;border-radius:12px!important}
-  .light-point{width:clamp(74px,21vw,105px)!important;height:clamp(74px,21vw,105px)!important}
-  .light-point::before{inset:36%!important}
-  .tech-info-card,.tech-manual-card{padding:17px!important;max-height:90dvh!important}
-  .tech-info-top{grid-template-columns:58px 1fr!important}
-  .tech-info-icon-wrap{width:58px!important;height:58px!important;border-radius:18px!important}
-  .tech-info-icon-wrap img{width:44px!important;height:44px!important}
-  .tech-info-grid,.tech-manual-list{grid-template-columns:1fr!important}
-  .tech-manual-item{grid-template-columns:48px 1fr!important;padding:11px!important}
-  .tech-manual-icon{width:48px!important;height:48px!important}
-  .tech-manual-icon img{width:38px!important;height:38px!important}
+body.game-mode {
+  background:
+    radial-gradient(circle at 8% 8%, rgba(255, 43, 214, 0.20), transparent 26%),
+    radial-gradient(circle at 80% 20%, rgba(38, 232, 255, 0.12), transparent 28%),
+    linear-gradient(135deg, #03040a, #080713 55%, #07030d);
+}
+
+
+/* Effets d’ambiance globaux */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background:
+    radial-gradient(circle at 15% 15%, rgba(255, 43, 214, 0.08), transparent 22%),
+    radial-gradient(circle at 82% 34%, rgba(38, 232, 255, 0.06), transparent 20%),
+    rgba(0, 0, 0, 0.12);
+  z-index: 0;
+}
+
+body.game-mode::before {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.10;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.035) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: overlay;
+  z-index: 0;
 }
 
 
 /* =========================================================
-   CORRECTION FINALE — schéma propre + image visible + popups ok
+   3. ÉCRAN DE CHARGEMENT
    ========================================================= */
 
-/* Desktop : technologies désormais à gauche, droite = image + transmission */
-@media(min-width:761px){
-  .game-grid{
-    grid-template-columns:minmax(250px, 300px) minmax(520px, 1fr) minmax(310px, 380px) !important;
-    gap:14px !important;
-  }
-
-  .left-column{
-    display:grid !important;
-    grid-template-rows:auto auto 1fr auto !important;
-    gap:12px !important;
-    min-height:0 !important;
-  }
-
-  .left-column .tech-panel{
-    display:block !important;
-    padding:14px !important;
-    min-height:140px !important;
-  }
-
-  .left-column .tech-icons{
-    grid-template-columns:repeat(3, 1fr) !important;
-    gap:10px !important;
-  }
-
-  .left-column .tech-btn{
-    width:54px !important;
-    height:54px !important;
-    border-radius:16px !important;
-    margin:auto !important;
-  }
-
-  .right-column{
-    display:grid !important;
-    grid-template-rows:minmax(260px, 1fr) minmax(260px, 1fr) auto !important;
-    gap:12px !important;
-    min-height:0 !important;
-  }
-
-  .ship-transfer-panel{
-    display:block !important;
-    min-height:260px !important;
-    padding:14px !important;
-  }
-
-  .ship-transfer-box{
-    height:calc(100% - 34px) !important;
-    min-height:215px !important;
-    display:grid !important;
-  }
-
-  .transmission-panel{
-    display:block !important;
-    min-height:240px !important;
-    max-height:none !important;
-  }
-
-  .transmission-list{
-    min-height:165px !important;
-    max-height:240px !important;
-    overflow:auto !important;
-  }
-
-  .reactor-click img{
-    object-fit:contain !important;
-    object-position:center center !important;
-    background:radial-gradient(circle at 50% 45%,rgba(38,232,255,.10),transparent 45%), rgba(0,0,0,.35) !important;
-  }
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 43, 214, 0.18), transparent 30%),
+    radial-gradient(circle at 30% 20%, rgba(38, 232, 255, 0.16), transparent 30%),
+    rgba(2, 3, 10, 0.88);
+  backdrop-filter: blur(12px);
 }
 
-/* Mobile : gauche = infos + technologies, bas = transmission + image transmise */
-@media(max-width:760px){
-  html, body{
-    overflow:hidden !important;
-    width:100% !important;
-    height:100% !important;
-  }
-
-  body.game-mode{
-    position:fixed !important;
-    inset:0 !important;
-    overflow:hidden !important;
-  }
-
-  .game-shell{
-    width:100vw !important;
-    height:100dvh !important;
-    padding:6px !important;
-    display:grid !important;
-    grid-template-rows:52px 1fr 188px !important;
-    gap:6px !important;
-    overflow:hidden !important;
-  }
-
-  .game-header{
-    height:52px !important;
-    min-height:52px !important;
-    margin:0 !important;
-    display:grid !important;
-    grid-template-columns:1fr auto !important;
-    grid-template-areas:"label status" "title status" !important;
-    align-items:center !important;
-    gap:0 8px !important;
-  }
-
-  .project-label{
-    grid-area:label !important;
-    font-size:7.5px !important;
-    letter-spacing:1.1px !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-  }
-
-  .game-header h1{
-    grid-area:title !important;
-    font-size:23px !important;
-    line-height:1 !important;
-    letter-spacing:4px !important;
-    margin:0 !important;
-    text-align:left !important;
-  }
-
-  .system-pill{
-    grid-area:status !important;
-    justify-self:end !important;
-    font-size:10px !important;
-    padding:7px 9px !important;
-    max-width:110px !important;
-  }
-
-  .game-grid{
-    height:100% !important;
-    min-height:0 !important;
-    display:grid !important;
-    grid-template-columns:132px minmax(0,1fr) !important;
-    grid-template-rows:minmax(0,1fr) 188px !important;
-    gap:6px !important;
-    overflow:hidden !important;
-  }
-
-  .left-column{
-    grid-column:1 !important;
-    grid-row:1 / -1 !important;
-    display:grid !important;
-    grid-template-columns:1fr !important;
-    grid-template-rows:50px 64px minmax(0,1fr) 184px !important;
-    gap:6px !important;
-    min-height:0 !important;
-    overflow:hidden !important;
-  }
-
-  .connected-panel{
-    display:flex !important;
-    min-height:0 !important;
-    padding:6px !important;
-    border-radius:16px !important;
-  }
-
-  .connected-row{
-    gap:5px !important;
-    align-items:center !important;
-  }
-
-  .connected-row img,
-  .operator-avatar{
-    width:28px !important;
-    height:28px !important;
-    border-radius:9px !important;
-  }
-
-  .connected-row span{
-    font-size:8px !important;
-    line-height:1.05 !important;
-  }
-
-  .connected-row strong{
-    font-size:10.5px !important;
-    line-height:1 !important;
-  }
-
-  .panel-title{
-    display:none !important;
-  }
-
-  .energy-panel{
-    padding:7px !important;
-    min-height:0 !important;
-    border-radius:16px !important;
-  }
-
-  .energy-label{
-    font-size:10px !important;
-    margin-bottom:2px !important;
-  }
-
-  .energy-main span{
-    font-size:28px !important;
-    line-height:.9 !important;
-  }
-
-  .energy-main small{
-    font-size:13px !important;
-  }
-
-  .stats-panel{
-    padding:7px !important;
-    min-height:0 !important;
-    overflow:hidden !important;
-    border-radius:16px !important;
-  }
-
-  .stats-panel .stat-row{
-    display:flex !important;
-    font-size:9.5px !important;
-    padding:3px 0 !important;
-    line-height:1.05 !important;
-  }
-
-  .stats-panel .stat-row span,
-  .stats-panel .stat-row strong{
-    font-size:9.5px !important;
-  }
-
-  .meter-group{
-    margin-top:5px !important;
-  }
-
-  .meter-head{
-    font-size:9px !important;
-  }
-
-  .meter{
-    height:7px !important;
-    margin:3px 0 !important;
-  }
-
-  .meter-group small{
-    font-size:8px !important;
-    line-height:1.1 !important;
-  }
-
-  /* Technologies dans la colonne gauche, sous les stats */
-  .left-column .tech-panel{
-    display:block !important;
-    grid-column:auto !important;
-    grid-row:4 !important;
-    padding:7px !important;
-    height:100% !important;
-    min-height:0 !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-  }
-
-  .tech-panel-head{
-    margin-bottom:7px !important;
-    display:flex !important;
-    justify-content:space-between !important;
-    align-items:center !important;
-    gap:6px !important;
-  }
-
-  .tech-panel-head h3{
-    display:block !important;
-    font-size:11px !important;
-    margin:0 !important;
-  }
-
-  #techManualBtn{
-    font-size:9.5px !important;
-    padding:5px 7px !important;
-    border-radius:999px !important;
-  }
-
-  .left-column .tech-icons{
-    display:grid !important;
-    grid-template-columns:repeat(2,1fr) !important;
-    gap:7px !important;
-    padding:0 !important;
-  }
-
-  .left-column .tech-btn{
-    width:42px !important;
-    height:42px !important;
-    border-radius:12px !important;
-    margin:auto !important;
-  }
-
-  .tech-btn::after{
-    display:none !important;
-  }
-
-  /* Réacteur visible en entier */
-  .reactor-panel{
-    grid-column:2 !important;
-    grid-row:1 !important;
-    min-height:0 !important;
-    height:100% !important;
-    border-radius:18px !important;
-    overflow:hidden !important;
-  }
-
-  .reactor-click{
-    height:100% !important;
-    min-height:0 !important;
-    touch-action:manipulation !important;
-  }
-
-  .reactor-click img{
-    width:100% !important;
-    height:100% !important;
-    object-fit:contain !important;
-    object-position:center center !important;
-    background:radial-gradient(circle at 50% 45%,rgba(38,232,255,.10),transparent 45%), rgba(0,0,0,.34) !important;
-  }
-
-  .level-badge{
-    top:7px !important;
-    left:7px !important;
-    padding:6px 9px !important;
-    font-size:10px !important;
-  }
-
-  .center-objective{
-    top:7px !important;
-    right:7px !important;
-    min-width:100px !important;
-    padding:7px 8px !important;
-    border-radius:12px !important;
-  }
-
-  .center-objective span{
-    font-size:7px !important;
-  }
-
-  .center-objective strong{
-    font-size:13px !important;
-  }
-
-  .center-objective small{
-    font-size:9px !important;
-  }
-
-  /* Right-column sert seulement à la zone narrative en bas à droite */
-  .right-column{
-    grid-column:2 !important;
-    grid-row:2 !important;
-    display:grid !important;
-    grid-template-columns:1fr 1fr !important;
-    grid-template-rows:1fr !important;
-    gap:6px !important;
-    min-height:0 !important;
-    max-height:none !important;
-    overflow:hidden !important;
-  }
-
-  .right-column .tech-panel{
-    display:none !important;
-  }
-
-  /* Transmission à gauche de la zone basse */
-  .transmission-panel{
-    grid-column:1 !important;
-    grid-row:1 !important;
-    width:auto !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:7px !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-    display:block !important;
-  }
-
-  .trans-head{
-    margin-bottom:6px !important;
-  }
-
-  .transmission-panel h3{
-    font-size:12px !important;
-    margin:0 !important;
-  }
-
-  #soundToggle{
-    font-size:9.5px !important;
-    padding:4px 6px !important;
-  }
-
-  .transmission-list{
-    min-height:126px !important;
-    max-height:136px !important;
-    overflow:auto !important;
-    padding:6px !important;
-    gap:5px !important;
-  }
-
-  .transmission-card{
-    grid-template-columns:26px 1fr !important;
-    gap:6px !important;
-    padding:6px !important;
-    border-radius:12px !important;
-  }
-
-  .transmission-card img{
-    width:26px !important;
-    height:26px !important;
-    border-radius:8px !important;
-  }
-
-  .transmission-card strong{
-    font-size:10px !important;
-  }
-
-  .transmission-card p{
-    font-size:10px !important;
-    line-height:1.2 !important;
-  }
-
-  /* Image transmise à droite, toujours visible */
-  .ship-transfer-panel{
-    grid-column:2 !important;
-    grid-row:1 !important;
-    display:block !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    width:auto !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:7px !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-  }
-
-  .ship-transfer-panel h3{
-    display:block !important;
-    font-size:9.5px !important;
-    margin:0 0 5px !important;
-    letter-spacing:.4px !important;
-    color:rgba(247,244,255,.88) !important;
-  }
-
-  .ship-transfer-box{
-    display:grid !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    height:calc(100% - 22px) !important;
-    min-height:134px !important;
-    border-radius:13px !important;
-    padding:6px !important;
-  }
-
-  .ship-transfer-box span{
-    font-size:7.5px !important;
-    letter-spacing:.6px !important;
-  }
-
-  .ship-transfer-box img{
-    width:100% !important;
-    height:100% !important;
-    object-fit:cover !important;
-    display:block !important;
-  }
-
-  .controls{
-    display:none !important;
-  }
-
-  .light-point{
-    width:clamp(74px,21vw,105px) !important;
-    height:clamp(74px,21vw,105px) !important;
-  }
-
-  .light-point::before{
-    inset:36% !important;
-  }
+.preloader.hidden {
+  animation: preloaderOut 0.45s ease forwards;
 }
 
-/* Très petits écrans */
-@media(max-width:420px){
-  @media(max-width:760px){
-    .game-grid{
-      grid-template-columns:124px minmax(0,1fr) !important;
-    }
-
-    .left-column{
-      grid-template-rows:48px 60px minmax(0,1fr) 184px !important;
-    }
-
-    .left-column .tech-btn{
-      width:38px !important;
-      height:38px !important;
-    }
-
-    .transmission-list{
-      min-height:122px !important;
-      max-height:132px !important;
-    }
-
-    .ship-transfer-box{
-      min-height:130px !important;
-    }
-  }
+.preloader-card {
+  width: min(620px, 94vw);
+  padding: 34px;
+  border-radius: 30px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025));
+  box-shadow: 0 0 90px rgba(255,43,214,0.22), 0 30px 120px rgba(0,0,0,0.75);
 }
 
-/* Popups propres et réellement responsive */
+.loader-orb {
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff, var(--cyan) 22%, var(--pink) 58%, transparent 72%);
+  box-shadow: 0 0 30px #fff, 0 0 70px var(--pink), 0 0 110px var(--cyan);
+  animation: loaderPulse 1.15s infinite alternate;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.preloader-card h2 {
+  margin: 8px 0 14px;
+  font-size: clamp(34px, 7vw, 62px);
+  text-transform: uppercase;
+  text-shadow: 0 0 28px var(--pink), 0 0 55px var(--cyan);
+}
+
+.preload-bar {
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.12);
+  margin: 18px 0 10px;
+}
+
+.preload-bar span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--cyan), var(--pink));
+  transition: width 0.25s ease;
+}
+
+#preloadPercent {
+  display: block;
+  margin-bottom: 16px;
+}
+
+
+/* =========================================================
+   4. INTRO VISUELLE
+   ========================================================= */
+
+.intro-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(18px, 4vw, 48px);
+  position: relative;
+  z-index: 2;
+}
+
+.intro-screen {
+  width: min(980px, 92vw);
+  animation: cardIn 0.65s ease both;
+}
+
+.intro-screen.leaving {
+  animation: cardOut 0.25s ease both;
+}
+
+.intro-card {
+  display: grid;
+  grid-template-columns: minmax(250px, 34%) 1fr;
+  gap: clamp(22px, 3vw, 34px);
+  align-items: center;
+  min-height: 390px;
+  padding: clamp(18px, 2.2vw, 30px);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 8% 18%, rgba(38,232,255,0.16), transparent 28%),
+    radial-gradient(circle at 88% 84%, rgba(255,43,214,0.22), transparent 36%),
+    linear-gradient(135deg, rgba(9,12,26,0.88), rgba(22,8,32,0.84));
+  box-shadow: 0 30px 120px rgba(0,0,0,0.65), 0 0 70px rgba(255,43,214,0.16);
+  backdrop-filter: blur(10px);
+}
+
+.nova-card {
+  background:
+    radial-gradient(circle at 9% 22%, rgba(38,232,255,0.20), transparent 30%),
+    radial-gradient(circle at 92% 80%, rgba(139,92,255,0.20), transparent 36%),
+    linear-gradient(135deg, rgba(5,8,18,0.88), rgba(13,8,28,0.84));
+}
+
+.visual-side {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(38,232,255,0.10), rgba(255,43,214,0.08));
+  box-shadow: inset 0 0 50px rgba(38,232,255,0.10);
+}
+
+.character-frame {
+  background:
+    radial-gradient(circle at 50% 35%, rgba(38,232,255,0.16), transparent 45%),
+    linear-gradient(135deg, rgba(255,255,255,0.05), rgba(139,92,255,0.08));
+}
+
+.main-img {
+  width: 100%;
+  max-height: 315px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 28px rgba(38,232,255,0.25));
+}
+
+.ship-img {
+  animation: floatShip 4s ease-in-out infinite;
+}
+
+.ia-img {
+  max-height: 330px;
+  animation: none;
+}
+
+.intro-card h1 {
+  margin: 0 0 22px;
+  font-size: clamp(40px, 4.7vw, 66px);
+  line-height: 0.92;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 0 0 28px rgba(255,43,214,0.45), 0 0 60px rgba(38,232,255,0.18);
+}
+
+.intro-card p {
+  margin: 0 0 18px;
+  color: #d5cfe5;
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.actions button,
+#enterBtn {
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 14px;
+  padding: 13px 18px;
+  color: var(--text);
+  font: 800 15px/1 Inter, Arial, sans-serif;
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(38,232,255,0.24), rgba(255,43,214,0.30));
+  box-shadow: 0 0 24px rgba(255,43,214,0.16);
+  transition: 0.2s ease;
+}
+
+.actions button:hover,
+#enterBtn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(38,232,255,0.65);
+}
+
+.secondary {
+  background: rgba(255,255,255,0.05) !important;
+}
+
+
+/* =========================================================
+   5. STRUCTURE PRINCIPALE DU JEU
+   ========================================================= */
+
+.game-shell {
+  position: relative;
+  z-index: 2;
+  height: 100dvh;
+  padding: 14px;
+  max-width: 1660px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.game-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  height: 76px;
+}
+
+.project-label {
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 12px;
+}
+
+.game-header h1 {
+  margin: 0;
+  font-size: clamp(38px, 4.5vw, 62px);
+  letter-spacing: 12px;
+  text-align: center;
+  text-shadow: 0 0 28px rgba(255,43,214,0.55);
+}
+
+.system-pill {
+  justify-self: end;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.35);
+  color: var(--muted);
+}
+
+.game-grid {
+  height: calc(100dvh - 100px);
+  display: grid;
+  grid-template-columns: minmax(220px, 260px) minmax(430px, 1fr) minmax(310px, 365px);
+  gap: 14px;
+}
+
+.left-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(14,18,33,0.86), rgba(11,12,24,0.78));
+  box-shadow: 0 20px 70px rgba(0,0,0,0.35), inset 0 0 50px rgba(255,255,255,0.025);
+  backdrop-filter: blur(12px);
+}
+
+
+/* =========================================================
+   6. COLONNE GAUCHE : CONNEXION, ÉNERGIE, STATS
+   ========================================================= */
+
+.connected-panel,
+.energy-panel,
+.stats-panel,
+.tech-panel,
+.transmission-panel {
+  padding: 14px;
+}
+
+.panel-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.green-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #55ff20;
+  box-shadow: 0 0 16px #55ff20;
+}
+
+.connected-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.connected-row img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: top;
+  background: #05050b;
+}
+
+.connected-row span {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.connected-row strong {
+  font-size: 19px;
+}
+
+.energy-panel {
+  background:
+    radial-gradient(circle at 15% 30%, rgba(255,43,214,0.26), transparent 34%),
+    linear-gradient(135deg, rgba(28,17,42,0.88), rgba(9,26,34,0.72));
+}
+
+.energy-label {
+  color: var(--muted);
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.energy-main {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.energy-main span {
+  font-size: clamp(40px, 4vw, 64px);
+  line-height: 0.86;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 0 18px rgba(255,43,214,0.95), 0 0 42px rgba(38,232,255,0.25);
+}
+
+.energy-main small {
+  font-size: 23px;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 3px;
+}
+
+.stats-panel {
+  flex: 1;
+}
+
+.stat-row,
+.meter-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.stat-row {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.stat-row strong {
+  color: var(--text);
+}
+
+.danger-row strong {
+  color: var(--red);
+}
+
+.meter-group {
+  margin-top: 14px;
+}
+
+.meter {
+  height: 12px;
+  border: 1px solid rgba(255,255,255,0.20);
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 7px 0 5px;
+}
+
+.meter span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--pink), var(--red));
+  transition: width 0.25s ease;
+}
+
+.meter.decode span {
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+}
+
+.meter-group small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   7. RÉACTEUR
+   ========================================================= */
+
+.reactor-panel {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+
+.level-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 4;
+  padding: 10px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.55);
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 800;
+}
+
+.center-objective {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 4;
+  padding: 12px 15px;
+  min-width: 190px;
+  border-radius: 18px;
+  border: 1px solid rgba(38,232,255,0.28);
+  background: rgba(0,0,0,0.50);
+  box-shadow: 0 0 34px rgba(38,232,255,0.10);
+}
+
+.center-objective span {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+}
+
+.center-objective strong {
+  display: block;
+  margin: 4px 0;
+  font-size: 22px;
+  color: white;
+}
+
+.center-objective small {
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+.reactor-click {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.reactor-click::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(38,232,255,0.10), transparent 42%);
+  opacity: 0.8;
+}
+
+.reactor-click img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.08) brightness(0.88);
+  transition: 0.22s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.reactor-click:hover img {
+  transform: scale(1.025);
+  filter: contrast(1.15) brightness(1.03);
+}
+
+.reactor-click.clicked img {
+  transform: scale(1.045);
+  filter: contrast(1.28) brightness(1.18);
+}
+
+.reactor-panel.critical-pulse {
+  border-color: rgba(255,58,99,0.90);
+  box-shadow:
+    0 0 0 2px rgba(255,58,99,0.32),
+    0 0 45px rgba(255,58,99,0.38),
+    inset 0 0 50px rgba(255,58,99,0.18);
+  animation: dryShake 0.18s linear infinite;
+}
+
+
+/* =========================================================
+   8. POINT LUMINEUX
+   ---------------------------------------------------------
+   IMPORTANT :
+   - On affiche uniquement l'image point_lumineux.png.
+   - Pas de cercle.
+   - Pas de fallback visuel généré.
+   - Pas de halo CSS artificiel.
+   ========================================================= */
+
+.point-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.light-point {
+  position: absolute;
+  width: clamp(115px, 10vw, 175px);
+  height: clamp(115px, 10vw, 175px);
+  border: none;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 80;
+  animation: pointPulse 0.42s alternate infinite;
+}
+
+.light-point picture,
+.light-point img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.light-point img {
+  object-fit: contain;
+  filter: none;
+}
+
+/* Aucun cercle autour du point lumineux */
+.light-point::before,
+.light-point::after {
+  content: none !important;
+  display: none !important;
+}
+
+
+/* =========================================================
+   9. TECHNOLOGIES
+   ========================================================= */
+
+.tech-panel {
+  overflow: visible;
+}
+
+.tech-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tech-panel h3,
+.transmission-panel h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+.tech-icons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  justify-items: center;
+  padding: 8px 0 2px;
+}
+
+.tech-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.20);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.18), transparent 35%),
+    rgba(255,255,255,0.045);
+  cursor: pointer;
+  box-shadow: inset 0 0 20px rgba(38,232,255,0.07);
+  position: relative;
+  transition: 0.2s ease;
+}
+
+.tech-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+}
+
+/* Verrouillé par le niveau */
+.tech-btn.locked {
+  opacity: 0.32 !important;
+  filter: grayscale(1) brightness(0.55) !important;
+  border-color: rgba(255,255,255,0.10) !important;
+  cursor: not-allowed !important;
+}
+
+/* Déverrouillé mais énergie insuffisante */
+.tech-btn.unlocked.unaffordable {
+  opacity: 1 !important;
+  filter: none !important;
+  border-color: rgba(38,232,255,0.55) !important;
+  box-shadow:
+    0 0 18px rgba(38,232,255,0.28),
+    inset 0 0 24px rgba(38,232,255,0.12) !important;
+  cursor: not-allowed !important;
+}
+
+/* Déverrouillé et activable */
+.tech-btn.unlocked.affordable {
+  opacity: 1 !important;
+  filter: none !important;
+  border-color: rgba(95,255,135,1) !important;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(95,255,135,0.32), transparent 42%),
+    linear-gradient(135deg, rgba(95,255,135,0.18), rgba(38,232,255,0.10)) !important;
+  box-shadow:
+    0 0 0 2px rgba(95,255,135,0.38),
+    0 0 34px rgba(95,255,135,0.62),
+    inset 0 0 24px rgba(95,255,135,0.18) !important;
+}
+
+.tech-btn::after {
+  content: attr(data-tooltip);
+  white-space: pre-line;
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: 250px;
+  padding: 13px;
+  border-radius: 14px;
+  border: 1px solid rgba(38,232,255,0.42);
+  background: rgba(5,8,18,0.98);
+  color: #f7f4ff;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 60;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 0 24px rgba(38,232,255,0.12);
+}
+
+.tech-btn:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* =========================================================
+   10. TRANSMISSIONS ET IMAGE VAISSEAU
+   ========================================================= */
+
+.transmission-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.trans-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+#soundToggle,
+#techManualBtn,
+#openTransmissionBtn {
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.transmission-list {
+  flex: 1;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 12px;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(38,232,255,0.06), transparent 38%),
+    rgba(0,0,0,0.22);
+}
+
+.transmission-card {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid rgba(38,232,255,0.22);
+  border-radius: 14px;
+  background: rgba(0,0,0,0.24);
+}
+
+.transmission-card img {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.transmission-card strong {
+  display: block;
+  color: var(--cyan);
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.transmission-card p {
+  margin: 0;
+  color: #ddd8ee;
+  line-height: 1.35;
+  font-size: 13px;
+}
+
+.ship-transfer-panel {
+  padding: 14px;
+}
+
+.ship-transfer-panel h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+.ship-transfer-box {
+  min-height: 170px;
+  border: 1px dashed rgba(38,232,255,0.28);
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  color: var(--muted);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(38,232,255,0.06), transparent 42%),
+    rgba(0,0,0,0.18);
+}
+
+
+/* =========================================================
+   11. CONTRÔLES
+   ========================================================= */
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.controls button {
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 16px;
+  padding: 16px 12px;
+  color: white;
+  font-weight: 900;
+  background: linear-gradient(135deg, rgba(38,232,255,0.18), rgba(255,43,214,0.28));
+  cursor: pointer;
+}
+
+.controls .danger {
+  background: linear-gradient(135deg, rgba(255,34,90,0.25), rgba(255,139,43,0.18));
+}
+
+
+/* =========================================================
+   12. POPUPS
+   ========================================================= */
+
 .game-over-modal,
 .success-modal,
 .level-choice-modal,
 .tech-info-modal,
-.tech-manual-modal{
-  padding:clamp(10px, 3vw, 24px) !important;
-  overflow:hidden !important;
+.tech-manual-modal,
+.transmission-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: grid;
+  place-items: center;
+  padding: clamp(10px, 3vw, 24px);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(38,232,255,0.14), transparent 34%),
+    radial-gradient(circle at 85% 80%, rgba(255,43,214,0.14), transparent 34%),
+    rgba(0,0,0,0.78);
+  backdrop-filter: blur(13px);
+  -webkit-backdrop-filter: blur(13px);
 }
 
 .game-over-card,
 .success-card,
 .level-choice-card,
 .tech-info-card,
-.tech-manual-card{
-  width:min(720px,94vw) !important;
-  max-height:86dvh !important;
-  overflow:auto !important;
-  overscroll-behavior:contain !important;
-  border-radius:clamp(18px,3vw,30px) !important;
-  padding:clamp(14px,3vw,28px) !important;
+.tech-manual-card,
+.transmission-modal-card {
+  width: min(760px, 94vw);
+  max-height: 86dvh;
+  overflow: auto;
+  border: 1px solid rgba(38,232,255,0.40);
+  border-radius: 28px;
+  padding: clamp(14px, 3vw, 28px);
+  background:
+    radial-gradient(circle at 12% 10%, rgba(38,232,255,0.18), transparent 30%),
+    radial-gradient(circle at 90% 88%, rgba(255,43,214,0.16), transparent 32%),
+    linear-gradient(135deg, rgba(6,9,22,0.96), rgba(18,8,32,0.95));
+  box-shadow: 0 0 90px rgba(38,232,255,0.18), 0 35px 130px rgba(0,0,0,0.86);
 }
 
-.game-over-card{
-  width:min(650px,94vw) !important;
-  display:flex !important;
-  flex-direction:column !important;
-  gap:10px !important;
-}
-
-.game-over-card .eyebrow{
-  margin:0 !important;
-  font-size:clamp(10px,2vw,14px) !important;
-  letter-spacing:clamp(2px,.5vw,5px) !important;
-}
-
-.game-over-card h2{
-  margin:0 !important;
-  font-size:clamp(34px,8vw,72px) !important;
-  line-height:.9 !important;
-  letter-spacing:clamp(2px,.8vw,7px) !important;
-}
-
-.game-over-reason{
-  margin:0 0 4px !important;
-  font-size:clamp(13px,2.6vw,22px) !important;
-  line-height:1.25 !important;
-}
-
-.game-over-stats,
-.success-stats{
-  display:grid !important;
-  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-  gap:8px !important;
-  margin:4px 0 !important;
-}
-
-.game-over-stats div,
-.success-stats div{
-  padding:9px 11px !important;
-  border-radius:14px !important;
-  min-height:auto !important;
-}
-
-.game-over-stats span,
-.success-stats span{
-  font-size:9px !important;
-  letter-spacing:1.2px !important;
-  margin-bottom:4px !important;
-}
-
-.game-over-stats strong,
-.success-stats strong{
-  font-size:clamp(15px,3vw,20px) !important;
-  line-height:1.1 !important;
-}
-
-#restartGameBtn,
-#successRestartBtn,
-#closeTechInfoBtn,
-#missionCompleteBtn,
-#continueProductionBtn{
-  min-height:42px !important;
-  padding:11px 14px !important;
-  border-radius:14px !important;
-  font-size:12px !important;
-}
-
-/* Manuel et popup techno compacts */
-.tech-info-card{
-  width:min(600px,94vw) !important;
-}
-
+.game-over-card h2,
+.success-card h2,
+.level-choice-card h2,
 .tech-info-card h2,
 .tech-manual-card h2,
-.success-card h2,
-.level-choice-card h2{
-  font-size:clamp(26px,6vw,50px) !important;
-  line-height:.95 !important;
-}
-
-.tech-info-top{
-  grid-template-columns:56px 1fr !important;
-  gap:11px !important;
-  margin-bottom:10px !important;
-}
-
-.tech-info-icon-wrap{
-  width:56px !important;
-  height:56px !important;
-  border-radius:17px !important;
-}
-
-.tech-info-icon-wrap img{
-  width:40px !important;
-  height:40px !important;
-}
-
-.tech-info-grid{
-  grid-template-columns:1fr 1fr !important;
-  gap:8px !important;
-  margin:9px 0 !important;
-}
-
-.tech-info-grid div,
-.tech-info-section{
-  padding:9px !important;
-  border-radius:13px !important;
-}
-
-.tech-info-section{
-  margin-top:7px !important;
-}
-
-.tech-info-section h3{
-  font-size:10.5px !important;
-  margin-bottom:4px !important;
-}
-
-.tech-info-section p{
-  font-size:12px !important;
-  line-height:1.3 !important;
-}
-
-.tech-manual-head{
-  position:relative !important;
-  padding-right:42px !important;
+.transmission-modal-card h2 {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  font-size: clamp(30px, 6vw, 58px);
+  line-height: 0.95;
+  letter-spacing: 2px;
+  text-shadow: 0 0 28px rgba(38,232,255,0.42);
 }
 
 .modal-x,
-.tech-manual-head #closeTechManualBtn{
-  position:absolute !important;
-  top:0 !important;
-  right:0 !important;
-  width:34px !important;
-  height:34px !important;
-  border-radius:50% !important;
-  padding:0 !important;
-  font-size:22px !important;
+#closeTechManualBtn,
+#closeTransmissionModalBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 22px;
+  display: grid;
+  place-items: center;
 }
 
-.tech-manual-list{
-  grid-template-columns:1fr !important;
-  max-height:58dvh !important;
-  gap:8px !important;
-}
 
-.tech-manual-item{
-  grid-template-columns:42px 1fr !important;
-  gap:9px !important;
-  padding:9px !important;
-  border-radius:14px !important;
-}
+/* =========================================================
+   13. RESPONSIVE TABLETTE / PETIT ORDINATEUR
+   ========================================================= */
 
-.tech-manual-icon{
-  width:42px !important;
-  height:42px !important;
-  border-radius:13px !important;
-}
-
-.tech-manual-icon img{
-  width:32px !important;
-  height:32px !important;
-}
-
-.tech-manual-content h3{
-  font-size:12px !important;
-  margin-bottom:5px !important;
-}
-
-.manual-meta{
-  gap:4px !important;
-  margin-bottom:5px !important;
-}
-
-.manual-meta span{
-  font-size:8.5px !important;
-  padding:3px 6px !important;
-}
-
-.tech-manual-content p{
-  font-size:10.5px !important;
-  line-height:1.25 !important;
-  margin-top:4px !important;
-}
-
-/* Paysage mobile : popups en grille plus compacte */
-@media(max-width:900px) and (orientation:landscape){
-  .game-over-card,
-  .success-card,
-  .level-choice-card,
-  .tech-info-card,
-  .tech-manual-card{
-    max-height:88dvh !important;
-    width:min(760px,94vw) !important;
-    padding:13px !important;
+@media (max-width: 1150px) {
+  body {
+    overflow: auto;
   }
 
-  .game-over-card h2{
-    font-size:38px !important;
+  .game-shell {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
   }
 
-  .game-over-stats{
-    grid-template-columns:repeat(3,1fr) !important;
+  .game-header {
+    height: auto;
+    grid-template-columns: 1fr;
+    text-align: center;
   }
 
-  .tech-info-grid{
-    grid-template-columns:1fr 1fr !important;
+  .system-pill {
+    justify-self: center;
   }
 
-  .tech-manual-list{
-    grid-template-columns:1fr 1fr !important;
-    max-height:48dvh !important;
+  .game-grid {
+    height: auto;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .left-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+
+  .stats-panel {
+    grid-column: 1 / -1;
+  }
+
+  .right-column {
+    display: grid;
+    grid-template-columns: 330px 1fr;
+  }
+
+  .transmission-panel {
+    grid-column: 1 / -1;
+    min-height: 230px;
+  }
+
+  .reactor-panel {
+    min-height: 58vh;
   }
 }
 
 
 /* =========================================================
-   MOBILE FULL SPACE — utilise tout l'écran, pas de grande zone vide
+   14. RESPONSIVE TÉLÉPHONE
    ========================================================= */
-@media(max-width:760px){
 
-  html,
-  body{
-    width:100% !important;
-    height:100% !important;
-    min-height:100% !important;
-    margin:0 !important;
-    overflow:hidden !important;
-    background:#02030a !important;
+@media (max-width: 760px) {
+  body.screen-1 {
+    background:
+      linear-gradient(rgba(2,2,8,0.25), rgba(2,2,8,0.36)),
+      url("nv_asset/illustrations_tel/1Univers.PNG") center / cover no-repeat fixed,
+      #020208;
   }
 
-  body.game-mode,
-  body{
-    position:fixed !important;
-    inset:0 !important;
-    overflow:hidden !important;
+  body.screen-2 {
+    background:
+      linear-gradient(rgba(0,0,8,0.18), rgba(0,0,12,0.34)),
+      url("nv_asset/illustrations_tel/2Univers_planete.PNG") center / cover no-repeat fixed,
+      #020208;
   }
 
-  .game-shell{
-    width:100vw !important;
-    height:100dvh !important;
-    min-height:100dvh !important;
-    max-height:100dvh !important;
-    padding:6px !important;
-    box-sizing:border-box !important;
-    display:grid !important;
-    grid-template-rows:46px minmax(0,1fr) 236px !important;
-    gap:6px !important;
-    overflow:hidden !important;
+  body.screen-3 {
+    background:
+      linear-gradient(rgba(0,0,8,0.18), rgba(0,0,12,0.34)),
+      url("nv_asset/illustrations_tel/3planete.PNG") center / cover no-repeat fixed,
+      #020208;
   }
 
-  .game-header{
-    height:46px !important;
-    min-height:46px !important;
-    margin:0 !important;
-    padding:0 !important;
-    display:grid !important;
-    grid-template-columns:1fr auto !important;
+  body.screen-4 {
+    background:
+      linear-gradient(rgba(0,0,8,0.18), rgba(0,0,12,0.34)),
+      url("nv_asset/illustrations_tel/4porte.PNG") center / cover no-repeat fixed,
+      #020208;
+  }
+
+  .intro-page {
+    padding: 18px;
+  }
+
+  .intro-card {
+    grid-template-columns: 1fr;
+    min-height: unset;
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .visual-side {
+    min-height: 210px;
+  }
+
+  .main-img {
+    max-height: 230px;
+  }
+
+  .ia-img {
+    max-height: 250px;
+  }
+
+  .intro-card h1 {
+    font-size: 38px;
+  }
+
+  .intro-card p {
+    font-size: 14px;
+    line-height: 1.42;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  body.game-mode {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .game-shell {
+    width: 100vw;
+    height: 100svh;
+    min-height: 100svh;
+    max-height: 100svh;
+    padding: 6px;
+    display: grid;
+    grid-template-rows: 46px minmax(0, 1fr);
+    gap: 6px;
+    overflow: hidden;
+  }
+
+  .game-header {
+    height: 46px;
+    min-height: 46px;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
     grid-template-areas:
       "label status"
-      "title status" !important;
-    align-items:center !important;
-    gap:0 8px !important;
+      "title status";
+    gap: 0 8px;
+    text-align: left;
   }
 
-  .project-label{
-    grid-area:label !important;
-    font-size:7px !important;
-    letter-spacing:1.2px !important;
-    margin:0 !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
+  .project-label {
+    grid-area: label;
+    font-size: 7px;
+    letter-spacing: 1.1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .game-header h1{
-    grid-area:title !important;
-    font-size:22px !important;
-    line-height:1 !important;
-    letter-spacing:4px !important;
-    margin:0 !important;
-    text-align:left !important;
+  .game-header h1 {
+    grid-area: title;
+    font-size: 21px;
+    letter-spacing: 4px;
+    text-align: left;
   }
 
-  .system-pill{
-    grid-area:status !important;
-    justify-self:end !important;
-    align-self:center !important;
-    font-size:9.5px !important;
-    padding:6px 8px !important;
-    max-width:108px !important;
+  .system-pill {
+    grid-area: status;
+    font-size: 9.5px;
+    padding: 6px 8px;
+    max-width: 108px;
   }
 
-  .game-grid{
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-    display:grid !important;
-    grid-template-columns:132px minmax(0,1fr) !important;
-    grid-template-rows:minmax(0,1fr) 236px !important;
-    gap:6px !important;
-    overflow:hidden !important;
+  .game-grid {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 66%) minmax(0, 1fr) 44px;
+    gap: 6px;
+    overflow: hidden;
   }
 
-  /* GAUCHE : toutes les infos importantes + technologies */
-  .left-column{
-    grid-column:1 !important;
-    grid-row:1 / -1 !important;
-    display:grid !important;
-    grid-template-columns:1fr !important;
-    grid-template-rows:48px 62px minmax(0,1fr) 222px !important;
-    gap:6px !important;
-    min-height:0 !important;
-    overflow:hidden !important;
+  .left-column {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    display: grid;
+    grid-template-rows: 48px 62px minmax(0, 1fr) 222px;
+    gap: 6px;
+    min-height: 0;
+    overflow: hidden;
   }
 
-  .connected-panel{
-    display:flex !important;
-    padding:6px !important;
-    min-height:0 !important;
-    border-radius:15px !important;
+  .connected-panel,
+  .energy-panel,
+  .stats-panel,
+  .tech-panel {
+    padding: 7px;
+    border-radius: 15px;
   }
 
-  .connected-row{
-    gap:5px !important;
+  .panel-title {
+    display: none;
   }
 
-  .connected-row img,
-  .operator-avatar{
-    width:28px !important;
-    height:28px !important;
-    border-radius:9px !important;
+  .connected-row img {
+    width: 28px;
+    height: 28px;
   }
 
-  .connected-row span{
-    font-size:8px !important;
-    line-height:1 !important;
+  .connected-row span,
+  .connected-row strong,
+  .stat-row,
+  .stat-row span,
+  .stat-row strong {
+    font-size: 9px;
   }
 
-  .connected-row strong{
-    font-size:10.5px !important;
-    line-height:1 !important;
+  .energy-main span {
+    font-size: 27px;
   }
 
-  .panel-title{
-    display:none !important;
+  .meter {
+    height: 6px;
+    margin: 2px 0;
   }
 
-  .energy-panel{
-    padding:7px !important;
-    border-radius:15px !important;
-    min-height:0 !important;
+  .meter-head,
+  .meter-group small {
+    font-size: 8px;
   }
 
-  .energy-label{
-    font-size:9.5px !important;
-    margin-bottom:2px !important;
+  .tech-panel-head {
+    flex-wrap: wrap;
+    gap: 5px;
   }
 
-  .energy-main span{
-    font-size:27px !important;
-    line-height:.9 !important;
+  #techManualBtn,
+  #openTransmissionBtn {
+    font-size: 9px;
+    padding: 4px 6px;
   }
 
-  .energy-main small{
-    font-size:13px !important;
+  .tech-icons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
 
-  .stats-panel{
-    padding:7px !important;
-    border-radius:15px !important;
-    min-height:0 !important;
-    overflow:hidden !important;
+  .tech-btn {
+    width: 43px;
+    height: 43px;
   }
 
-  .stats-panel .stat-row{
-    display:flex !important;
-    padding:2.7px 0 !important;
-    font-size:9.2px !important;
-    line-height:1.05 !important;
+  .tech-btn::after {
+    display: none;
   }
 
-  .stats-panel .stat-row span,
-  .stats-panel .stat-row strong{
-    font-size:9.2px !important;
+  .reactor-panel {
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 0;
+    height: 100%;
   }
 
-  .meter-group{
-    margin-top:5px !important;
+  .reactor-click img {
+    object-fit: contain;
+    transform: scale(1.04);
+    transform-origin: center center;
   }
 
-  .meter-head{
-    font-size:8.8px !important;
+  .level-badge {
+    top: 7px;
+    left: 7px;
+    padding: 6px 9px;
+    font-size: 10px;
   }
 
-  .meter{
-    height:6px !important;
-    margin:2px 0 !important;
+  .center-objective {
+    top: 7px;
+    right: 7px;
+    min-width: 100px;
+    padding: 7px 8px;
+    border-radius: 12px;
   }
 
-  .meter-group small{
-    font-size:7.6px !important;
-    line-height:1.05 !important;
+  .center-objective span {
+    font-size: 7px;
   }
 
-  /* Technologies : on utilise la place verticale gauche */
-  .left-column .tech-panel{
-    grid-row:4 !important;
-    display:block !important;
-    padding:7px !important;
-    min-height:0 !important;
-    height:100% !important;
-    border-radius:15px !important;
-    overflow:hidden !important;
+  .center-objective strong {
+    font-size: 13px;
   }
 
-  .tech-panel-head{
-    margin-bottom:7px !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:space-between !important;
-    gap:5px !important;
+  .center-objective small {
+    font-size: 9px;
   }
 
-  .tech-panel-head h3{
-    display:block !important;
-    font-size:11px !important;
-    margin:0 !important;
+  .right-column {
+    display: contents;
   }
 
-  #techManualBtn{
-    font-size:9px !important;
-    padding:4px 6px !important;
-    border-radius:999px !important;
+  .transmission-panel {
+    display: none;
   }
 
-  .left-column .tech-icons{
-    display:grid !important;
-    grid-template-columns:repeat(2,1fr) !important;
-    gap:8px !important;
-    padding:0 !important;
+  .ship-transfer-panel {
+    grid-column: 2;
+    grid-row: 2;
+    display: block;
+    height: 100%;
+    min-height: 0;
+    padding: 9px;
+    border-radius: 17px;
+    overflow: hidden;
   }
 
-  .left-column .tech-btn{
-    width:43px !important;
-    height:43px !important;
-    border-radius:12px !important;
-    margin:auto !important;
+  .ship-transfer-panel h3 {
+    font-size: 12px;
+    line-height: 1.1;
+    margin: 0 0 7px;
   }
 
-  .tech-btn::after{
-    display:none !important;
+  .ship-transfer-box {
+    height: calc(100% - 30px);
+    min-height: 0;
+    border-radius: 14px;
   }
 
-  /* CENTRE : réacteur conservé entier */
-  .reactor-panel{
-    grid-column:2 !important;
-    grid-row:1 !important;
-    min-height:0 !important;
-    height:100% !important;
-    border-radius:17px !important;
-    overflow:hidden !important;
+  .controls {
+    grid-column: 2;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    height: 44px;
   }
 
-  .reactor-click{
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
+  .controls button {
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+    border-radius: 14px;
+    font-size: 12px;
   }
 
-  .reactor-click img{
-    width:100% !important;
-    height:100% !important;
-    object-fit:contain !important;
-    object-position:center center !important;
-    background:
-      radial-gradient(circle at 50% 45%,rgba(38,232,255,.10),transparent 45%),
-      rgba(0,0,0,.34) !important;
+  .light-point {
+    width: clamp(115px, 30vw, 155px);
+    height: clamp(115px, 30vw, 155px);
   }
 
-  .level-badge{
-    top:7px !important;
-    left:7px !important;
-    padding:6px 9px !important;
-    font-size:10px !important;
-  }
-
-  .center-objective{
-    top:7px !important;
-    right:7px !important;
-    min-width:100px !important;
-    padding:7px 8px !important;
-    border-radius:12px !important;
-  }
-
-  .center-objective span{
-    font-size:7px !important;
-  }
-
-  .center-objective strong{
-    font-size:13px !important;
-  }
-
-  .center-objective small{
-    font-size:9px !important;
-  }
-
-  /* BAS : transmission et image utilisent toute la largeur restante */
-  .right-column{
-    grid-column:2 !important;
-    grid-row:2 !important;
-    display:grid !important;
-    grid-template-columns:1.05fr .95fr !important;
-    grid-template-rows:1fr 44px !important;
-    gap:6px !important;
-    min-height:0 !important;
-    height:100% !important;
-    overflow:hidden !important;
-  }
-
-  .right-column > .tech-panel{
-    display:none !important;
-  }
-
-  .transmission-panel{
-    grid-column:1 !important;
-    grid-row:1 !important;
-    display:block !important;
-    width:auto !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:8px !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-  }
-
-  .trans-head{
-    margin-bottom:6px !important;
-    gap:6px !important;
-  }
-
-  .transmission-panel h3{
-    font-size:13px !important;
-    margin:0 !important;
-  }
-
-  #soundToggle{
-    font-size:9.5px !important;
-    padding:4px 6px !important;
-    white-space:normal !important;
-    line-height:1.05 !important;
-  }
-
-  .transmission-list{
-    min-height:150px !important;
-    max-height:164px !important;
-    padding:7px !important;
-    overflow:auto !important;
-    gap:6px !important;
-  }
-
-  .transmission-card{
-    grid-template-columns:28px 1fr !important;
-    gap:7px !important;
-    padding:7px !important;
-    border-radius:13px !important;
-  }
-
-  .transmission-card img{
-    width:28px !important;
-    height:28px !important;
-    border-radius:9px !important;
-  }
-
-  .transmission-card strong{
-    font-size:10.5px !important;
-  }
-
-  .transmission-card p{
-    font-size:10.5px !important;
-    line-height:1.22 !important;
-    word-break:normal !important;
-    overflow-wrap:break-word !important;
-  }
-
-  .ship-transfer-panel{
-    grid-column:2 !important;
-    grid-row:1 !important;
-    display:block !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    width:auto !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:8px !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-  }
-
-  .ship-transfer-panel h3{
-    display:block !important;
-    font-size:10px !important;
-    line-height:1.15 !important;
-    margin:0 0 6px !important;
-    letter-spacing:.4px !important;
-  }
-
-  .ship-transfer-box{
-    display:grid !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    height:calc(100% - 28px) !important;
-    min-height:146px !important;
-    border-radius:13px !important;
-    padding:6px !important;
-  }
-
-  .ship-transfer-box span{
-    font-size:7.8px !important;
-    letter-spacing:.5px !important;
-  }
-
-  .ship-transfer-box img{
-    width:100% !important;
-    height:100% !important;
-    object-fit:cover !important;
-    display:block !important;
-  }
-
-  .controls{
-    grid-column:1 / -1 !important;
-    grid-row:2 !important;
-    display:grid !important;
-    grid-template-columns:1fr 1fr !important;
-    gap:6px !important;
-  }
-
-  .controls button{
-    min-height:0 !important;
-    height:44px !important;
-    padding:8px !important;
-    border-radius:13px !important;
-    font-size:12px !important;
-  }
-
-  .light-point{
-    width:clamp(74px,21vw,105px) !important;
-    height:clamp(74px,21vw,105px) !important;
-  }
-
-  .light-point::before{
-    inset:36% !important;
-  }
-}
-
-/* Très petit téléphone : on compresse un peu, mais on garde les infos */
-@media(max-width:420px){
-  @media(max-width:760px){
-    .game-shell{
-      grid-template-rows:44px minmax(0,1fr) 226px !important;
-    }
-
-    .game-grid{
-      grid-template-columns:122px minmax(0,1fr) !important;
-      grid-template-rows:minmax(0,1fr) 226px !important;
-    }
-
-    .left-column{
-      grid-template-rows:46px 58px minmax(0,1fr) 212px !important;
-    }
-
-    .game-header h1{
-      font-size:20px !important;
-    }
-
-    .left-column .tech-btn{
-      width:38px !important;
-      height:38px !important;
-    }
-
-    .transmission-list{
-      min-height:142px !important;
-      max-height:156px !important;
-    }
-
-    .ship-transfer-box{
-      min-height:138px !important;
-    }
-  }
-}
-
-/* Si le téléphone est haut, on donne encore plus au bas narratif */
-@media(max-width:760px) and (min-height:850px){
-  .game-shell{
-    grid-template-rows:48px minmax(0,1fr) 270px !important;
-  }
-
-  .game-grid{
-    grid-template-rows:minmax(0,1fr) 270px !important;
-  }
-
-  .left-column{
-    grid-template-rows:50px 66px minmax(0,1fr) 252px !important;
-  }
-
-  .transmission-list{
-    min-height:184px !important;
-    max-height:198px !important;
-  }
-
-  .ship-transfer-box{
-    min-height:178px !important;
-  }
-}
-
-
-/* =========================================================
-   MOBILE FINAL — on utilise aussi le bas de l'écran
-   Objectif : plus de grand vide noir, transmission en long,
-   image transmise en dessous, boutons tout en bas.
-   ========================================================= */
-@media(max-width:760px){
-
-  html,
-  body{
-    width:100% !important;
-    height:100% !important;
-    min-height:100% !important;
-    overflow:hidden !important;
-    margin:0 !important;
-    background:#02030a !important;
-  }
-
-  body,
-  body.game-mode{
-    position:fixed !important;
-    inset:0 !important;
-    overflow:hidden !important;
-  }
-
-  .game-shell{
-    width:100vw !important;
-    height:100dvh !important;
-    min-height:100dvh !important;
-    max-height:100dvh !important;
-    padding:6px !important;
-    box-sizing:border-box !important;
-    display:grid !important;
-    grid-template-rows:46px minmax(0, 1fr) 44px !important;
-    gap:6px !important;
-    overflow:hidden !important;
-  }
-
-  .game-header{
-    height:46px !important;
-    min-height:46px !important;
-    margin:0 !important;
-    padding:0 !important;
-    display:grid !important;
-    grid-template-columns:1fr auto !important;
-    grid-template-areas:
-      "label status"
-      "title status" !important;
-    align-items:center !important;
-    gap:0 8px !important;
-  }
-
-  .project-label{
-    grid-area:label !important;
-    font-size:7px !important;
-    letter-spacing:1.1px !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-    margin:0 !important;
-  }
-
-  .game-header h1{
-    grid-area:title !important;
-    font-size:21px !important;
-    line-height:1 !important;
-    letter-spacing:4px !important;
-    margin:0 !important;
-    text-align:left !important;
-  }
-
-  .system-pill{
-    grid-area:status !important;
-    justify-self:end !important;
-    font-size:9.5px !important;
-    padding:6px 8px !important;
-    max-width:108px !important;
-  }
-
-  .game-grid{
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-    display:grid !important;
-    grid-template-columns:132px minmax(0,1fr) !important;
-    grid-template-rows:minmax(0, 42%) minmax(0, 28%) minmax(0, 30%) !important;
-    gap:6px !important;
-    overflow:hidden !important;
-  }
-
-  /* Colonne gauche : infos + technologies, sans manger le bas */
-  .left-column{
-    grid-column:1 !important;
-    grid-row:1 / -1 !important;
-    display:grid !important;
-    grid-template-columns:1fr !important;
-    grid-template-rows:48px 62px minmax(0,1fr) 188px !important;
-    gap:6px !important;
-    min-height:0 !important;
-    overflow:hidden !important;
-  }
-
-  .connected-panel{
-    display:flex !important;
-    padding:6px !important;
-    min-height:0 !important;
-    border-radius:15px !important;
-  }
-
-  .connected-row{
-    gap:5px !important;
-  }
-
-  .connected-row img,
-  .operator-avatar{
-    width:28px !important;
-    height:28px !important;
-    border-radius:9px !important;
-  }
-
-  .connected-row span{
-    font-size:8px !important;
-    line-height:1 !important;
-  }
-
-  .connected-row strong{
-    font-size:10.5px !important;
-    line-height:1 !important;
-  }
-
-  .panel-title{
-    display:none !important;
-  }
-
-  .energy-panel{
-    padding:7px !important;
-    border-radius:15px !important;
-    min-height:0 !important;
-  }
-
-  .energy-label{
-    font-size:9.5px !important;
-    margin-bottom:2px !important;
-  }
-
-  .energy-main span{
-    font-size:27px !important;
-    line-height:.9 !important;
-  }
-
-  .energy-main small{
-    font-size:13px !important;
-  }
-
-  .stats-panel{
-    padding:7px !important;
-    border-radius:15px !important;
-    min-height:0 !important;
-    overflow:hidden !important;
-  }
-
-  .stats-panel .stat-row{
-    display:flex !important;
-    padding:2.7px 0 !important;
-    font-size:9.2px !important;
-    line-height:1.05 !important;
-  }
-
-  .stats-panel .stat-row span,
-  .stats-panel .stat-row strong{
-    font-size:9.2px !important;
-  }
-
-  .meter-group{
-    margin-top:5px !important;
-  }
-
-  .meter-head{
-    font-size:8.8px !important;
-  }
-
-  .meter{
-    height:6px !important;
-    margin:2px 0 !important;
-  }
-
-  .meter-group small{
-    font-size:7.6px !important;
-    line-height:1.05 !important;
-  }
-
-  .left-column .tech-panel{
-    grid-row:4 !important;
-    display:block !important;
-    padding:7px !important;
-    min-height:0 !important;
-    height:100% !important;
-    border-radius:15px !important;
-    overflow:hidden !important;
-  }
-
-  .tech-panel-head{
-    margin-bottom:7px !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:space-between !important;
-    gap:5px !important;
-  }
-
-  .tech-panel-head h3{
-    display:block !important;
-    font-size:11px !important;
-    margin:0 !important;
-  }
-
-  #techManualBtn{
-    font-size:9px !important;
-    padding:4px 6px !important;
-    border-radius:999px !important;
-  }
-
-  .left-column .tech-icons{
-    display:grid !important;
-    grid-template-columns:repeat(2,1fr) !important;
-    gap:8px !important;
-    padding:0 !important;
-  }
-
-  .left-column .tech-btn{
-    width:43px !important;
-    height:43px !important;
-    border-radius:12px !important;
-    margin:auto !important;
-  }
-
-  .tech-btn::after{
-    display:none !important;
-  }
-
-  /* Haut droit : réacteur */
-  .reactor-panel{
-    grid-column:2 !important;
-    grid-row:1 !important;
-    min-height:0 !important;
-    height:100% !important;
-    border-radius:17px !important;
-    overflow:hidden !important;
-  }
-
-  .reactor-click{
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-  }
-
-  .reactor-click img{
-    width:100% !important;
-    height:100% !important;
-    object-fit:contain !important;
-    object-position:center center !important;
-    background:
-      radial-gradient(circle at 50% 45%,rgba(38,232,255,.10),transparent 45%),
-      rgba(0,0,0,.34) !important;
-  }
-
-  .level-badge{
-    top:7px !important;
-    left:7px !important;
-    padding:6px 9px !important;
-    font-size:10px !important;
-  }
-
-  .center-objective{
-    top:7px !important;
-    right:7px !important;
-    min-width:100px !important;
-    padding:7px 8px !important;
-    border-radius:12px !important;
-  }
-
-  .center-objective span{
-    font-size:7px !important;
-  }
-
-  .center-objective strong{
-    font-size:13px !important;
-  }
-
-  .center-objective small{
-    font-size:9px !important;
-  }
-
-  /* Right-column = zones narratives empilées sur TOUT le bas droit */
-  .right-column{
-    grid-column:2 !important;
-    grid-row:2 / 4 !important;
-    display:grid !important;
-    grid-template-columns:1fr !important;
-    grid-template-rows:1fr 1fr !important;
-    gap:6px !important;
-    min-height:0 !important;
-    height:100% !important;
-    overflow:hidden !important;
-  }
-
-  .right-column > .tech-panel{
-    display:none !important;
-  }
-
-  /* Transmission en haut, en long */
-  .transmission-panel{
-    grid-column:1 !important;
-    grid-row:1 !important;
-    display:block !important;
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:8px !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-  }
-
-  .trans-head{
-    margin-bottom:6px !important;
-    gap:6px !important;
-  }
-
-  .transmission-panel h3{
-    font-size:13px !important;
-    margin:0 !important;
-  }
-
-  #soundToggle{
-    font-size:9.5px !important;
-    padding:4px 7px !important;
-    white-space:nowrap !important;
-    line-height:1.05 !important;
-  }
-
-  .transmission-list{
-    min-height:0 !important;
-    height:calc(100% - 32px) !important;
-    max-height:none !important;
-    padding:7px !important;
-    overflow:auto !important;
-    gap:6px !important;
-  }
-
-  .transmission-card{
-    grid-template-columns:30px 1fr !important;
-    gap:8px !important;
-    padding:8px !important;
-    border-radius:13px !important;
-  }
-
-  .transmission-card img{
-    width:30px !important;
-    height:30px !important;
-    border-radius:9px !important;
-  }
-
-  .transmission-card strong{
-    font-size:11px !important;
-  }
-
-  .transmission-card p{
-    font-size:11px !important;
-    line-height:1.25 !important;
-    word-break:normal !important;
-    overflow-wrap:break-word !important;
-  }
-
-  /* Image transmise en dessous, en long */
-  .ship-transfer-panel{
-    grid-column:1 !important;
-    grid-row:2 !important;
-    display:block !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:8px !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-  }
-
-  .ship-transfer-panel h3{
-    display:block !important;
-    font-size:11px !important;
-    line-height:1.1 !important;
-    margin:0 0 6px !important;
-    letter-spacing:.3px !important;
-  }
-
-  .ship-transfer-box{
-    display:grid !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    height:calc(100% - 28px) !important;
-    min-height:0 !important;
-    border-radius:13px !important;
-    padding:6px !important;
-  }
-
-  .ship-transfer-box span{
-    font-size:8px !important;
-    letter-spacing:.6px !important;
-  }
-
-  .ship-transfer-box img{
-    width:100% !important;
-    height:100% !important;
-    object-fit:cover !important;
-    display:block !important;
-  }
-
-  /* Boutons en bas, sous toute l'interface */
-  .controls{
-    grid-row:3 !important;
-    display:grid !important;
-    grid-template-columns:1fr 1fr !important;
-    gap:6px !important;
-    width:100% !important;
-    height:44px !important;
-  }
-
-  .controls button{
-    height:44px !important;
-    min-height:0 !important;
-    padding:8px !important;
-    border-radius:13px !important;
-    font-size:12px !important;
-  }
-
-  .light-point{
-    width:clamp(74px,21vw,105px) !important;
-    height:clamp(74px,21vw,105px) !important;
-  }
-
-  .light-point::before{
-    inset:36% !important;
-  }
-}
-
-/* Téléphones plus petits : compacte mais utilise toujours le bas */
-@media(max-width:420px){
-  @media(max-width:760px){
-    .game-shell{
-      grid-template-rows:44px minmax(0,1fr) 42px !important;
-    }
-
-    .game-grid{
-      grid-template-columns:122px minmax(0,1fr) !important;
-      grid-template-rows:minmax(0,40%) minmax(0,30%) minmax(0,30%) !important;
-    }
-
-    .left-column{
-      grid-template-rows:46px 58px minmax(0,1fr) 178px !important;
-    }
-
-    .game-header h1{
-      font-size:20px !important;
-    }
-
-    .left-column .tech-btn{
-      width:38px !important;
-      height:38px !important;
-    }
-
-    .transmission-card p{
-      font-size:10.5px !important;
-    }
-
-    .ship-transfer-panel h3{
-      font-size:10px !important;
-    }
-
-    .controls{
-      height:42px !important;
-    }
-
-    .controls button{
-      height:42px !important;
-    }
-  }
-}
-
-/* Téléphone haut : encore plus de place pour la narration */
-@media(max-width:760px) and (min-height:850px){
-  .game-grid{
-    grid-template-rows:minmax(0,40%) minmax(0,30%) minmax(0,30%) !important;
-  }
-
-  .left-column{
-    grid-template-rows:50px 64px minmax(0,1fr) 220px !important;
-  }
-}
-
-
-/* =========================================================
-   CORRECTION MOBILE — utiliser vraiment tout le bas
-   ========================================================= */
-@media(max-width:760px){
-
-  html,
-  body{
-    width:100% !important;
-    height:100% !important;
-    min-height:100% !important;
-    margin:0 !important;
-    padding:0 !important;
-    overflow:hidden !important;
-    background:#02030a !important;
-  }
-
-  body,
-  body.game-mode{
-    position:fixed !important;
-    inset:0 !important;
-    overflow:hidden !important;
-  }
-
-  .game-shell{
-    width:100vw !important;
-    height:100dvh !important;
-    min-height:100dvh !important;
-    max-height:100dvh !important;
-    padding:6px !important;
-    box-sizing:border-box !important;
-    display:grid !important;
-    grid-template-rows:46px minmax(0,1fr) !important;
-    gap:6px !important;
-    overflow:hidden !important;
-  }
-
-  .game-grid{
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-    display:grid !important;
-    grid-template-columns:132px minmax(0,1fr) !important;
-    grid-template-rows:minmax(0,33%) minmax(0,25%) minmax(0,32%) 44px !important;
-    gap:6px !important;
-    overflow:hidden !important;
-  }
-
-  .left-column{
-    grid-column:1 !important;
-    grid-row:1 / -1 !important;
-    display:grid !important;
-    grid-template-columns:1fr !important;
-    grid-template-rows:48px 62px minmax(0,1fr) 218px !important;
-    gap:6px !important;
-    min-height:0 !important;
-    overflow:hidden !important;
-  }
-
-  .right-column{
-    display:contents !important;
-  }
-
-  .reactor-panel{
-    grid-column:2 !important;
-    grid-row:1 !important;
-    min-height:0 !important;
-    height:100% !important;
-  }
-
-  .transmission-panel{
-    grid-column:2 !important;
-    grid-row:2 !important;
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:8px !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-  }
-
-  .transmission-list{
-    height:calc(100% - 32px) !important;
-    min-height:0 !important;
-    max-height:none !important;
-    overflow:auto !important;
-  }
-
-  .ship-transfer-panel{
-    grid-column:2 !important;
-    grid-row:3 !important;
-    display:block !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:8px !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-  }
-
-  .ship-transfer-box{
-    height:calc(100% - 28px) !important;
-    min-height:0 !important;
-    display:grid !important;
-  }
-
-  .controls{
-    grid-column:2 !important;
-    grid-row:4 !important;
-    display:grid !important;
-    grid-template-columns:1fr 1fr !important;
-    gap:6px !important;
-    width:100% !important;
-    height:44px !important;
-    min-height:0 !important;
-  }
-
-  .controls button{
-    height:44px !important;
-    min-height:0 !important;
-    padding:8px !important;
-    border-radius:13px !important;
-    font-size:12px !important;
-  }
-
-  .left-column .tech-panel{
-    grid-row:4 !important;
-    height:100% !important;
-    min-height:0 !important;
-  }
-}
-
-/* Téléphones très hauts : le bas narratif prend encore plus de place */
-@media(max-width:760px) and (min-height:850px){
-  .game-grid{
-    grid-template-rows:minmax(0,31%) minmax(0,26%) minmax(0,35%) 44px !important;
-  }
-
-  .left-column{
-    grid-template-rows:48px 62px minmax(0,1fr) 250px !important;
-  }
-}
-
-/* Petits téléphones : on compacte, mais sans laisser de vide */
-@media(max-width:420px){
-  @media(max-width:760px){
-    .game-grid{
-      grid-template-columns:122px minmax(0,1fr) !important;
-      grid-template-rows:minmax(0,32%) minmax(0,25%) minmax(0,33%) 42px !important;
-    }
-
-    .left-column{
-      grid-template-rows:46px 58px minmax(0,1fr) 208px !important;
-    }
-
-    .controls{
-      height:42px !important;
-    }
-
-    .controls button{
-      height:42px !important;
-    }
-  }
-}
-
-
-/* =========================================================
-   TÉLÉPHONE : Transmission devient un bouton + popup
-   Objectif : donner plus de place au générateur.
-   ========================================================= */
-
-#openTransmissionBtn{
-  border:1px solid rgba(38,232,255,.36);
-  border-radius:999px;
-  padding:7px 10px;
-  color:white;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:900;
-  background:linear-gradient(135deg,rgba(38,232,255,.18),rgba(255,43,214,.18));
-  box-shadow:0 0 18px rgba(38,232,255,.10);
-}
-
-.tech-panel-head{
-  flex-wrap:wrap;
-}
-
-/* Popup transmissions */
-.transmission-modal{
-  position:fixed;
-  inset:0;
-  z-index:10001;
-  display:grid;
-  place-items:center;
-  padding:clamp(10px,3vw,24px);
-  background:
-    radial-gradient(circle at 50% 38%,rgba(38,232,255,.14),transparent 34%),
-    radial-gradient(circle at 85% 80%,rgba(255,43,214,.14),transparent 34%),
-    rgba(0,0,0,.78);
-  backdrop-filter:blur(13px);
-  -webkit-backdrop-filter:blur(13px);
-}
-
-.transmission-modal-card{
-  position:relative;
-  width:min(720px,94vw);
-  max-height:86dvh;
-  overflow:hidden;
-  border:1px solid rgba(38,232,255,.40);
-  border-radius:28px;
-  padding:22px;
-  background:
-    radial-gradient(circle at 12% 10%,rgba(38,232,255,.18),transparent 30%),
-    radial-gradient(circle at 90% 88%,rgba(255,43,214,.16),transparent 32%),
-    linear-gradient(135deg,rgba(6,9,22,.96),rgba(18,8,32,.95));
-  box-shadow:0 0 90px rgba(38,232,255,.18),0 0 120px rgba(255,43,214,.12),0 35px 130px rgba(0,0,0,.86);
-}
-
-.transmission-modal-head{
-  position:relative;
-  padding-right:44px;
-  margin-bottom:14px;
-}
-
-.transmission-modal-head h2{
-  margin:0;
-  text-transform:uppercase;
-  font-size:clamp(30px,6vw,58px);
-  line-height:.95;
-  letter-spacing:2px;
-  text-shadow:0 0 28px rgba(38,232,255,.42);
-}
-
-.transmission-modal-list{
-  max-height:62dvh;
-  overflow:auto;
-  display:grid;
-  gap:10px;
-  padding-right:4px;
-}
-
-.transmission-modal-list .transmission-card{
-  display:grid;
-  grid-template-columns:46px 1fr;
-  gap:12px;
-  padding:13px;
-  border-radius:17px;
-  border:1px solid rgba(38,232,255,.25);
-  background:rgba(0,0,0,.28);
-}
-
-.transmission-modal-list .transmission-card img{
-  width:46px;
-  height:46px;
-  border-radius:13px;
-  object-fit:cover;
-}
-
-.transmission-modal-list .transmission-card strong{
-  color:var(--cyan);
-  font-size:14px;
-  text-transform:uppercase;
-}
-
-.transmission-modal-list .transmission-card p{
-  color:#f0ecfb;
-  margin:4px 0 0;
-  line-height:1.35;
-  font-size:14px;
-}
-
-/* Desktop : on garde le panneau Transmission visible */
-@media(min-width:761px){
-  #openTransmissionBtn{
-    font-size:11px;
-    padding:7px 9px;
-  }
-}
-
-/* Mobile : on enlève le panneau Transmission fixe et on agrandit le réacteur */
-@media(max-width:760px){
-
-  #openTransmissionBtn{
-    font-size:9px !important;
-    padding:4px 6px !important;
-  }
-
-  .tech-panel-head{
-    gap:5px !important;
-  }
-
-  /* Répartition mobile :
-     gauche = infos + tech
-     droite haut = générateur agrandi
-     droite bas = image transmise
-     boutons fixés en bas
-  */
-  .game-grid{
-    grid-template-columns:132px minmax(0,1fr) !important;
-    grid-template-rows:minmax(0,64%) minmax(0,36%) !important;
-    gap:6px !important;
-  }
-
-  .left-column{
-    grid-column:1 !important;
-    grid-row:1 / -1 !important;
-    grid-template-rows:48px 62px minmax(0,1fr) 222px !important;
-  }
-
-  .reactor-panel{
-    grid-column:2 !important;
-    grid-row:1 !important;
-    height:100% !important;
-    min-height:0 !important;
-  }
-
-  .reactor-click img{
-    object-fit:contain !important;
-    object-position:center center !important;
-    transform:scale(1.08);
-    transform-origin:center center;
-  }
-
-  .right-column{
-    display:contents !important;
-  }
-
-  .transmission-panel{
-    display:none !important;
-  }
-
-  .ship-transfer-panel{
-    grid-column:2 !important;
-    grid-row:2 !important;
-    display:block !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    width:100% !important;
-    height:100% !important;
-    min-height:0 !important;
-    padding:9px !important;
-    border-radius:17px !important;
-    overflow:hidden !important;
-  }
-
-  .ship-transfer-panel h3{
-    font-size:12px !important;
-    line-height:1.1 !important;
-    margin:0 0 7px !important;
-  }
-
-  .ship-transfer-box{
-    height:calc(100% - 30px) !important;
-    min-height:0 !important;
-    border-radius:14px !important;
-  }
-
-  .controls{
-    position:fixed !important;
-    left:calc(132px + 12px) !important;
-    right:6px !important;
-    bottom:calc(6px + env(safe-area-inset-bottom, 0px)) !important;
-    height:44px !important;
-    display:grid !important;
-    grid-template-columns:1fr 1fr !important;
-    gap:6px !important;
-    z-index:50 !important;
-  }
-
-  .controls button{
-    height:44px !important;
-    min-height:44px !important;
-    padding:8px !important;
-    border-radius:13px !important;
-    font-size:12px !important;
-  }
-
-  .transmission-modal{
-    padding:10px !important;
-  }
-
-  .transmission-modal-card{
-    width:94vw !important;
-    max-height:86dvh !important;
-    padding:14px !important;
-    border-radius:20px !important;
-  }
-
-  .transmission-modal-head{
-    padding-right:42px !important;
-    margin-bottom:10px !important;
-  }
-
-  .transmission-modal-head h2{
-    font-size:30px !important;
-  }
-
-  .transmission-modal-list{
-    max-height:70dvh !important;
-    gap:8px !important;
-  }
-
-  .transmission-modal-list .transmission-card{
-    grid-template-columns:38px 1fr !important;
-    gap:9px !important;
-    padding:10px !important;
-    border-radius:14px !important;
-  }
-
-  .transmission-modal-list .transmission-card img{
-    width:38px !important;
-    height:38px !important;
-    border-radius:11px !important;
-  }
-
-  .transmission-modal-list .transmission-card strong{
-    font-size:12px !important;
-  }
-
-  .transmission-modal-list .transmission-card p{
-    font-size:12px !important;
-    line-height:1.3 !important;
-  }
-}
-
-@media(max-width:420px){
-  @media(max-width:760px){
-    .game-grid{
-      grid-template-columns:122px minmax(0,1fr) !important;
-      grid-template-rows:minmax(0,64%) minmax(0,36%) !important;
-    }
-
-    .controls{
-      left:calc(122px + 12px) !important;
-      height:42px !important;
-    }
-
-    .controls button{
-      height:42px !important;
-      min-height:42px !important;
-    }
-
-    .reactor-click img{
-      transform:scale(1.06);
-    }
-  }
-}
-
-
-/* =========================================================
-   FIX MOBILE — boutons Pause / Reset propres
-   ========================================================= */
-@media(max-width:760px){
-
-  /* On laisse de la place sous l'image transmise pour les boutons */
-  .game-shell{
-    padding:6px 6px calc(58px + env(safe-area-inset-bottom, 0px)) 6px !important;
-    box-sizing:border-box !important;
-  }
-
-  .game-grid{
-    grid-template-columns:132px minmax(0,1fr) !important;
-    grid-template-rows:minmax(0,64%) minmax(0,36%) !important;
-    overflow:hidden !important;
-  }
-
-  .ship-transfer-panel{
-    padding-bottom:10px !important;
-    overflow:hidden !important;
-  }
-
-  .ship-transfer-box{
-    height:calc(100% - 32px) !important;
-    max-height:100% !important;
-  }
-
-  /* Boutons fixés sous le panneau image, pas par-dessus */
-  .controls{
-    position:fixed !important;
-    left:calc(132px + 12px) !important;
-    right:6px !important;
-    bottom:calc(6px + env(safe-area-inset-bottom, 0px)) !important;
-    width:auto !important;
-    height:46px !important;
-    display:grid !important;
-    grid-template-columns:1fr 1fr !important;
-    gap:8px !important;
-    z-index:80 !important;
-    pointer-events:auto !important;
-  }
-
-  .controls button{
-    width:100% !important;
-    height:46px !important;
-    min-height:46px !important;
-    padding:0 !important;
-    border-radius:15px !important;
-    font-size:13px !important;
-    line-height:1 !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-  }
-}
-
-@media(max-width:420px){
-  @media(max-width:760px){
-    .game-shell{
-      padding:6px 6px calc(54px + env(safe-area-inset-bottom, 0px)) 6px !important;
-    }
-
-    .game-grid{
-      grid-template-columns:122px minmax(0,1fr) !important;
-    }
-
-    .controls{
-      left:calc(122px + 12px) !important;
-      height:42px !important;
-      gap:7px !important;
-    }
-
-    .controls button{
-      height:42px !important;
-      min-height:42px !important;
-      font-size:12px !important;
-      border-radius:14px !important;
-    }
-  }
-}
-
-
-/* =========================================================
-   FIX — cacher Pause / Reset pendant les popups et l'intro
-   ========================================================= */
-@media(max-width:760px){
-
-  body.intro-active .controls,
-  body.modal-active .controls,
-  body.preload-active .controls,
-  body.story-active .controls{
-    display:none !important;
-  }
-
-  body:has(.intro-screen:not([hidden])) .controls,
-  body:has(.intro-overlay:not([hidden])) .controls,
-  body:has(.intro-modal:not([hidden])) .controls,
-  body:has(.story-screen:not([hidden])) .controls,
   body:has(.preloader:not([hidden])) .controls,
-  body:has(.preload-screen:not([hidden])) .controls,
   body:has(.tech-info-modal:not([hidden])) .controls,
   body:has(.tech-manual-modal:not([hidden])) .controls,
   body:has(.transmission-modal:not([hidden])) .controls,
   body:has(.game-over-modal:not([hidden])) .controls,
   body:has(.success-modal:not([hidden])) .controls,
-  body:has(.level-choice-modal:not([hidden])) .controls{
-    display:none !important;
+  body:has(.level-choice-modal:not([hidden])) .controls {
+    display: none !important;
+  }
+}
+
+@media (max-width: 420px) and (max-width: 760px) {
+  .game-grid {
+    grid-template-columns: 122px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 66%) minmax(0, 1fr) 42px;
   }
 
-  .intro-screen,
-  .intro-overlay,
-  .intro-modal,
-  .story-screen,
-  .preloader,
-  .preload-screen,
-  .tech-info-modal,
-  .tech-manual-modal,
-  .transmission-modal,
-  .game-over-modal,
-  .success-modal,
-  .level-choice-modal{
-    z-index:10000 !important;
+  .left-column {
+    grid-template-rows: 46px 58px minmax(0, 1fr) 210px;
+  }
+
+  .controls {
+    height: 42px;
+  }
+
+  .controls button {
+    height: 42px;
+    min-height: 42px;
+  }
+
+  .tech-btn {
+    width: 38px;
+    height: 38px;
   }
 }
 
 
 /* =========================================================
-   CORRECTION FINALE — PC sans bouton Trans / TEL avec popup
+   15. ANIMATIONS
    ========================================================= */
-#openTransmissionBtn{display:none}
-.transmission-modal{position:fixed;inset:0;z-index:10050;display:grid;place-items:center;padding:clamp(10px,3vw,24px);background:radial-gradient(circle at 50% 38%,rgba(38,232,255,.14),transparent 34%),radial-gradient(circle at 85% 80%,rgba(255,43,214,.14),transparent 34%),rgba(0,0,0,.80);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px)}
-.transmission-modal-card{position:relative;width:min(760px,94vw);max-height:86dvh;overflow:hidden;border:1px solid rgba(38,232,255,.40);border-radius:28px;padding:22px;background:radial-gradient(circle at 12% 10%,rgba(38,232,255,.18),transparent 30%),radial-gradient(circle at 90% 88%,rgba(255,43,214,.16),transparent 32%),linear-gradient(135deg,rgba(6,9,22,.96),rgba(18,8,32,.95));box-shadow:0 0 90px rgba(38,232,255,.18),0 0 120px rgba(255,43,214,.12),0 35px 130px rgba(0,0,0,.86)}
-.transmission-modal-head{position:relative;padding-right:44px;margin-bottom:14px}.transmission-modal-head h2{margin:0;text-transform:uppercase;font-size:clamp(30px,6vw,58px);line-height:.95;letter-spacing:2px;text-shadow:0 0 28px rgba(38,232,255,.42)}
-.transmission-modal-list{max-height:62dvh;overflow:auto;display:grid;gap:10px;padding-right:4px}.transmission-modal-list .transmission-card{display:grid;grid-template-columns:46px 1fr;gap:12px;padding:13px;border-radius:17px;border:1px solid rgba(38,232,255,.25);background:rgba(0,0,0,.28)}.transmission-modal-list .transmission-card img{width:46px;height:46px;border-radius:13px;object-fit:cover}.transmission-modal-list .transmission-card strong{color:var(--cyan);font-size:14px;text-transform:uppercase}.transmission-modal-list .transmission-card p{color:#f0ecfb;margin:4px 0 0;line-height:1.35;font-size:14px}
-@media(min-width:761px){.transmission-panel{display:flex!important}#openTransmissionBtn{display:none!important}.controls{position:static!important}}
-@media(max-width:760px){
-  html,body{width:100%!important;min-height:100%!important;margin:0!important;overflow:hidden!important;background:#02030a!important}body.game-mode{position:fixed!important;inset:0!important;overflow:hidden!important}
-  .game-shell{width:100vw!important;height:100svh!important;min-height:100svh!important;max-height:100svh!important;padding:6px!important;box-sizing:border-box!important;display:grid!important;grid-template-rows:46px minmax(0,1fr)!important;gap:6px!important;overflow:hidden!important}
-  .game-header{height:46px!important;min-height:46px!important;margin:0!important;padding:0!important;display:grid!important;grid-template-columns:1fr auto!important;grid-template-areas:"label status" "title status"!important;align-items:center!important;gap:0 8px!important}.project-label{grid-area:label!important;font-size:7px!important;letter-spacing:1.1px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;margin:0!important}.game-header h1{grid-area:title!important;font-size:21px!important;line-height:1!important;letter-spacing:4px!important;margin:0!important;text-align:left!important}.system-pill{grid-area:status!important;justify-self:end!important;font-size:9.5px!important;padding:6px 8px!important;max-width:108px!important}
-  .game-grid{width:100%!important;height:100%!important;min-height:0!important;display:grid!important;grid-template-columns:132px minmax(0,1fr)!important;grid-template-rows:minmax(0,66%) minmax(0,1fr) 44px!important;gap:6px!important;overflow:hidden!important}
-  .left-column{grid-column:1!important;grid-row:1 / -1!important;display:grid!important;grid-template-columns:1fr!important;grid-template-rows:48px 62px minmax(0,1fr) 222px!important;gap:6px!important;min-height:0!important;height:100%!important;overflow:hidden!important}
-  .connected-panel{display:flex!important;padding:6px!important;min-height:0!important;border-radius:15px!important}.connected-row{gap:5px!important}.connected-row img,.operator-avatar{width:28px!important;height:28px!important;border-radius:9px!important}.connected-row span{font-size:8px!important;line-height:1!important}.connected-row strong{font-size:10.5px!important;line-height:1!important}.panel-title{display:none!important}
-  .energy-panel{padding:7px!important;border-radius:15px!important;min-height:0!important}.energy-label{font-size:9.5px!important;margin-bottom:2px!important}.energy-main span{font-size:27px!important;line-height:.9!important}.energy-main small{font-size:13px!important}
-  .stats-panel{padding:7px!important;border-radius:15px!important;min-height:0!important;overflow:hidden!important}.stats-panel .stat-row{display:flex!important;padding:2.7px 0!important;font-size:9.2px!important;line-height:1.05!important}.stats-panel .stat-row span,.stats-panel .stat-row strong{font-size:9.2px!important}.meter-group{margin-top:5px!important}.meter-head{font-size:8.8px!important}.meter{height:6px!important;margin:2px 0!important}.meter-group small{font-size:7.6px!important;line-height:1.05!important}
-  .left-column .tech-panel{grid-row:4!important;display:block!important;padding:7px!important;min-height:0!important;height:100%!important;border-radius:15px!important;overflow:hidden!important}.tech-panel-head{margin-bottom:7px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:5px!important;flex-wrap:wrap!important}.tech-panel-head h3{display:block!important;font-size:11px!important;margin:0!important}#techManualBtn,#openTransmissionBtn{font-size:9px!important;padding:4px 6px!important;border-radius:999px!important}#openTransmissionBtn{display:inline-flex!important;align-items:center!important;justify-content:center!important;border:1px solid rgba(38,232,255,.36);color:white;cursor:pointer;font-weight:900;background:linear-gradient(135deg,rgba(38,232,255,.18),rgba(255,43,214,.18));box-shadow:0 0 18px rgba(38,232,255,.10)}.left-column .tech-icons{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:8px!important;padding:0!important}.left-column .tech-btn{width:43px!important;height:43px!important;border-radius:12px!important;margin:auto!important}.tech-btn::after{display:none!important}
-  .reactor-panel{grid-column:2!important;grid-row:1!important;min-height:0!important;height:100%!important;border-radius:17px!important;overflow:hidden!important}.reactor-click{width:100%!important;height:100%!important;min-height:0!important}.reactor-click img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;transform:scale(1.06);transform-origin:center center;background:radial-gradient(circle at 50% 45%,rgba(38,232,255,.10),transparent 45%),rgba(0,0,0,.34)!important}.level-badge{top:7px!important;left:7px!important;padding:6px 9px!important;font-size:10px!important}.center-objective{top:7px!important;right:7px!important;min-width:100px!important;padding:7px 8px!important;border-radius:12px!important}.center-objective span{font-size:7px!important}.center-objective strong{font-size:13px!important}.center-objective small{font-size:9px!important}
-  .right-column{display:contents!important}.transmission-panel{display:none!important}.ship-transfer-panel{grid-column:2!important;grid-row:2!important;display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;min-height:0!important;padding:9px!important;border-radius:17px!important;overflow:hidden!important}.ship-transfer-panel h3{font-size:12px!important;line-height:1.1!important;margin:0 0 7px!important}.ship-transfer-box{height:calc(100% - 30px)!important;min-height:0!important;border-radius:14px!important}.ship-transfer-box img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important}
-  .controls{grid-column:2!important;grid-row:3!important;position:static!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;width:100%!important;height:44px!important;min-height:0!important}.controls button{height:44px!important;min-height:44px!important;padding:0!important;border-radius:14px!important;font-size:12px!important;line-height:1!important;display:flex!important;align-items:center!important;justify-content:center!important}
-  .transmission-modal{padding:10px!important}.transmission-modal-card{width:94vw!important;max-height:86dvh!important;padding:14px!important;border-radius:20px!important}.transmission-modal-head{padding-right:42px!important;margin-bottom:10px!important}.transmission-modal-head h2{font-size:30px!important}.transmission-modal-list{max-height:70dvh!important;gap:8px!important}.transmission-modal-list .transmission-card{grid-template-columns:38px 1fr!important;gap:9px!important;padding:10px!important;border-radius:14px!important}.transmission-modal-list .transmission-card img{width:38px!important;height:38px!important;border-radius:11px!important}.transmission-modal-list .transmission-card strong{font-size:12px!important}.transmission-modal-list .transmission-card p{font-size:12px!important;line-height:1.3!important}
-  body.intro-active .controls,body.modal-active .controls,body.preload-active .controls,body.story-active .controls{display:none!important}body:has(.intro-screen:not([hidden])) .controls,body:has(.preloader:not([hidden])) .controls,body:has(.tech-info-modal:not([hidden])) .controls,body:has(.tech-manual-modal:not([hidden])) .controls,body:has(.transmission-modal:not([hidden])) .controls,body:has(.game-over-modal:not([hidden])) .controls,body:has(.success-modal:not([hidden])) .controls,body:has(.level-choice-modal:not([hidden])) .controls{display:none!important}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-@media(max-width:420px){@media(max-width:760px){.game-grid{grid-template-columns:122px minmax(0,1fr)!important;grid-template-rows:minmax(0,66%) minmax(0,1fr) 42px!important}.left-column{grid-template-rows:46px 58px minmax(0,1fr) 210px!important}.controls{height:42px!important}.controls button{height:42px!important;min-height:42px!important;font-size:12px!important}.reactor-click img{transform:scale(1.04)}}}
+
+@keyframes cardOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.985);
+  }
+}
+
+@keyframes floatShip {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes loaderPulse {
+  from {
+    transform: scale(0.92);
+    filter: brightness(0.9);
+  }
+
+  to {
+    transform: scale(1.08);
+    filter: brightness(1.45);
+  }
+}
+
+@keyframes preloaderOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes popEnergy {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -160%) scale(1.12);
+  }
+}
+
+@keyframes dryShake {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(2px, -1px);
+  }
+
+  50% {
+    transform: translate(-2px, 1px);
+  }
+
+  75% {
+    transform: translate(1px, 2px);
+  }
+}
+
+@keyframes pointPulse {
+  from {
+    transform: scale(0.92);
+  }
+
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes ring {
+  from {
+    opacity: 0.9;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
 
 
 /* =========================================================
-   FIX POINT LUMINEUX + ICÔNE SITE
-   Le point lumineux n'utilise plus une balise <img>.
-   Il est affiché en CSS pour éviter l'icône cassée.
+   CORRECTIFS FINAUX V11
+   ---------------------------------------------------------
+   - bouton Trans. caché sur ordinateur
+   - bouton Trans. visible seulement sur téléphone
+   - panneau Technologies corrigé sur téléphone
+   - Pause / Reset corrigés
+   - point lumineux = uniquement l'image point_lumineux.png
    ========================================================= */
 
-.light-point{
-  width:clamp(125px, 11vw, 185px) !important;
-  height:clamp(125px, 11vw, 185px) !important;
-  border:0 !important;
-  padding:0 !important;
-  background:transparent !important;
-  pointer-events:auto !important;
-  z-index:90 !important;
-  position:absolute !important;
-  display:grid !important;
-  place-items:center !important;
-  cursor:pointer !important;
+
+/* =========================================================
+   1. POINT LUMINEUX — PNG UNIQUEMENT
+   ========================================================= */
+
+.point-layer {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 50 !important;
+  pointer-events: none !important;
 }
 
-/* cache toute ancienne image si elle existe encore */
-.light-point img,
+.light-point {
+  position: absolute !important;
+  width: clamp(115px, 10vw, 175px) !important;
+  height: clamp(115px, 10vw, 175px) !important;
+  border: none !important;
+  padding: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 80 !important;
+  animation: pointPulse 0.42s alternate infinite !important;
+}
+
 .light-point picture,
-.light-point source{
-  display:none !important;
+.light-point img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
 }
 
-/* image réelle du point lumineux */
-.light-point::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:url("nv_asset/illustrations_ordi/point_lumineux.PNG");
-  background-size:contain;
-  background-position:center;
-  background-repeat:no-repeat;
-  filter:
-    drop-shadow(0 0 18px #ffffff)
-    drop-shadow(0 0 36px rgba(38,232,255,.95))
-    drop-shadow(0 0 72px rgba(255,43,214,.78));
-  animation:pointPulse .42s alternate infinite;
+.light-point img {
+  object-fit: contain !important;
+  filter: none !important;
 }
 
-/* cercle volontairement discret autour */
-.light-point::before{
-  content:"";
-  position:absolute;
-  inset:38% !important;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.20) !important;
-  box-shadow:
-    0 0 10px rgba(255,255,255,.14),
-    0 0 18px rgba(38,232,255,.10) !important;
-  animation:ring .9s infinite;
-  z-index:2;
+/* Important : aucune forme ajoutée autour de l'image */
+.light-point::before,
+.light-point::after {
+  content: none !important;
+  display: none !important;
 }
 
-@media(max-width:760px){
-  .light-point{
-    width:clamp(110px, 28vw, 150px) !important;
-    height:clamp(110px, 28vw, 150px) !important;
+
+/* =========================================================
+   2. TECHNOLOGIES — ORDINATEUR
+   ========================================================= */
+
+.tech-panel {
+  overflow: visible;
+}
+
+.tech-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#techManualBtn,
+#openTransmissionBtn {
+  white-space: nowrap;
+}
+
+/* PC : bouton Trans. caché */
+#openTransmissionBtn {
+  display: none !important;
+}
+
+@media (min-width: 761px) {
+  .transmission-panel {
+    display: flex !important;
   }
 
-  .light-point::after{
-    background-image:url("nv_asset/illustrations_tel/point_lumineux.PNG");
+  #openTransmissionBtn {
+    display: none !important;
+  }
+}
+
+
+/* =========================================================
+   3. RESPONSIVE TÉLÉPHONE — STRUCTURE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  html,
+  body {
+    width: 100% !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.game-mode {
+    position: fixed !important;
+    inset: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .game-shell {
+    width: 100vw !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
+    max-height: 100svh !important;
+    padding: 6px !important;
+    display: grid !important;
+    grid-template-rows: 46px minmax(0, 1fr) !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+  }
+
+  .game-header {
+    height: 46px !important;
+    min-height: 46px !important;
+    margin: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      "label status"
+      "title status" !important;
+    gap: 0 8px !important;
+    align-items: center !important;
+  }
+
+  .project-label {
+    grid-area: label !important;
+    font-size: 7px !important;
+    letter-spacing: 1.1px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .game-header h1 {
+    grid-area: title !important;
+    font-size: 21px !important;
+    letter-spacing: 4px !important;
+    text-align: left !important;
+    margin: 0 !important;
+  }
+
+  .system-pill {
+    grid-area: status !important;
+    font-size: 9.5px !important;
+    padding: 6px 8px !important;
+    max-width: 108px !important;
+  }
+
+  .game-grid {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: 132px minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 66%) minmax(0, 1fr) 44px !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+  }
+}
+
+
+/* =========================================================
+   4. RESPONSIVE TÉLÉPHONE — COLONNE GAUCHE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .left-column {
+    grid-column: 1 !important;
+    grid-row: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 48px 62px minmax(0, 1fr) 222px !important;
+    gap: 6px !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .connected-panel,
+  .energy-panel,
+  .stats-panel,
+  .tech-panel {
+    padding: 7px !important;
+    border-radius: 15px !important;
+  }
+
+  .panel-title {
+    display: none !important;
+  }
+
+  .connected-row {
+    gap: 5px !important;
+  }
+
+  .connected-row img {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .connected-row span,
+  .connected-row strong,
+  .stat-row,
+  .stat-row span,
+  .stat-row strong {
+    font-size: 9px !important;
+  }
+
+  .energy-main span {
+    font-size: 27px !important;
+  }
+
+  .meter {
+    height: 6px !important;
+    margin: 2px 0 !important;
+  }
+
+  .meter-head,
+  .meter-group small {
+    font-size: 8px !important;
+  }
+}
+
+
+/* =========================================================
+   5. RESPONSIVE TÉLÉPHONE — TECHNOLOGIES
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .tech-panel {
+    overflow: hidden !important;
+    width: 100% !important;
+  }
+
+  .tech-panel-head {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 5px !important;
+    align-items: center !important;
+  }
+
+  .tech-panel-head h3 {
+    grid-column: 1 / -1 !important;
+    margin: 0 !important;
+    font-size: 11px !important;
+  }
+
+  #techManualBtn,
+  #openTransmissionBtn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    padding: 4px 5px !important;
+    font-size: 8.5px !important;
+    line-height: 1 !important;
+    border-radius: 999px !important;
+    white-space: nowrap !important;
+  }
+
+  .tech-icons {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    padding: 8px 0 0 !important;
+  }
+
+  .tech-btn {
+    width: 43px !important;
+    height: 43px !important;
+    margin: auto !important;
+  }
+
+  .tech-btn::after {
+    display: none !important;
+  }
+}
+
+
+/* =========================================================
+   6. RESPONSIVE TÉLÉPHONE — RÉACTEUR
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .reactor-panel {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+
+  .reactor-click img {
+    object-fit: contain !important;
+    transform: scale(1.04) !important;
+    transform-origin: center center !important;
+  }
+
+  .level-badge {
+    top: 7px !important;
+    left: 7px !important;
+    padding: 6px 9px !important;
+    font-size: 10px !important;
+  }
+
+  .center-objective {
+    top: 7px !important;
+    right: 7px !important;
+    min-width: 100px !important;
+    padding: 7px 8px !important;
+    border-radius: 12px !important;
+  }
+
+  .center-objective span {
+    font-size: 7px !important;
+  }
+
+  .center-objective strong {
+    font-size: 13px !important;
+  }
+
+  .center-objective small {
+    font-size: 9px !important;
+  }
+}
+
+
+/* =========================================================
+   7. RESPONSIVE TÉLÉPHONE — TRANSMISSION EN POPUP
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .right-column {
+    display: contents !important;
+  }
+
+  /* Mobile : panneau Transmission caché */
+  .transmission-panel {
+    display: none !important;
+  }
+
+  /* Mobile : bouton Trans. visible */
+  #openTransmissionBtn {
+    display: inline-flex !important;
+  }
+
+  .ship-transfer-panel {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    display: block !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 9px !important;
+    border-radius: 17px !important;
+    overflow: hidden !important;
+  }
+
+  .ship-transfer-panel h3 {
+    font-size: 12px !important;
+    line-height: 1.1 !important;
+    margin: 0 0 7px !important;
+  }
+
+  .ship-transfer-box {
+    height: calc(100% - 30px) !important;
+    min-height: 0 !important;
+    border-radius: 14px !important;
+  }
+}
+
+
+/* =========================================================
+   8. RESPONSIVE TÉLÉPHONE — PAUSE / RESET
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .controls {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+    position: static !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 7px !important;
+    height: 44px !important;
+  }
+
+  .controls button {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    border-radius: 14px !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+  }
+
+  body.modal-active .controls,
+  body:has(.preloader:not([hidden])) .controls,
+  body:has(.tech-info-modal:not([hidden])) .controls,
+  body:has(.tech-manual-modal:not([hidden])) .controls,
+  body:has(.transmission-modal:not([hidden])) .controls,
+  body:has(.game-over-modal:not([hidden])) .controls,
+  body:has(.success-modal:not([hidden])) .controls,
+  body:has(.level-choice-modal:not([hidden])) .controls {
+    display: none !important;
+  }
+}
+
+
+/* =========================================================
+   9. RESPONSIVE PETIT TÉLÉPHONE
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .game-grid {
+    grid-template-columns: 122px minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 66%) minmax(0, 1fr) 42px !important;
+  }
+
+  .left-column {
+    grid-template-rows: 46px 58px minmax(0, 1fr) 210px !important;
+  }
+
+  .controls {
+    height: 42px !important;
+  }
+
+  .controls button {
+    height: 42px !important;
+    min-height: 42px !important;
+  }
+
+  .tech-btn {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .light-point {
+    width: clamp(115px, 30vw, 155px) !important;
+    height: clamp(115px, 30vw, 155px) !important;
   }
 }
