@@ -115,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+
   async function preloadAll(){
     let done = 0;
     for(const asset of assetsToPreload){
@@ -430,7 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const d = difficulty();
     btn.style.left = (d.spreadMin + Math.random() * d.spreadRange) + "%";
     btn.style.top = (d.spreadMin + Math.random() * d.spreadRange) + "%";
-    btn.innerHTML = `<picture><source media="(max-width:760px)" srcset="nv_asset/illustrations_tel/point_lumineux.PNG"><img src="nv_asset/illustrations_ordi/point_lumineux.PNG" alt="Point lumineux"></picture>`;
+    btn.innerHTML = `<picture><source media="(max-width:760px)" srcset="nv_asset/illustrations_tel/point_lumineux.png"><img src="nv_asset/illustrations_ordi/point_lumineux.png" alt="Point lumineux"></picture>`;
     btn.draggable = false;
     const pointImg = btn.querySelector("img");
     if(pointImg){
