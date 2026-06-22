@@ -1,6 +1,4 @@
 /* =========================================================
-   CYBERCORE OMEGA — SCRIPT.JS
-   Version commentée et corrigée
 
    Sections principales :
    - Introduction narrative
